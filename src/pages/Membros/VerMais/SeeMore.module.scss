@@ -1,0 +1,381 @@
+@import '../../../variables.scss';
+
+@mixin responsive-containerMain{
+    @media (max-width: 1300px){
+        h3{
+            margin-left: 14vw;
+        }
+    }
+    
+    @media (max-width: 600px){
+        margin: 20px auto;
+        
+        h3{
+            margin-left: 5vw;
+            font-size: 24px;
+        }
+    }
+}
+
+@mixin responsive-containerForms{
+    @media (max-width: 1300px){
+        width: 90%;
+        margin: 27px auto;
+    }
+
+    @media (max-width: 600px){
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@mixin responsive-sectionForm{
+    @media (max-width: 1300px){
+        width: 50%;
+    }
+
+    @media (max-width: 768px){
+        width: auto;
+    }
+}
+
+@mixin responsive-formPersonal{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 10vw);
+
+        .inputFull{
+            grid-column: 1/5;
+        }
+
+        .inputCpf{
+            grid-column: 1/3;
+        }
+
+        .inputRg{
+            grid-column: 3/5;
+        }
+
+        .inputSender{
+            grid-column: 1/2;
+        }
+
+        .inputBorn{
+            grid-column: 2/5;
+        }
+
+        .inputOrientationSex{
+            grid-column: 1/3;
+        }
+
+        .inputPhone{
+            grid-column: 3/5;
+        }
+
+        .inputEmail{
+            grid-column: 1/5;
+        }
+
+        .inputStatus{
+            grid-column: 4/5;
+        }
+    }
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+
+        input{
+            width: 40vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        input{
+            width: 100%;
+        }
+    }
+}
+
+@mixin responsive-formAddress{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 10vw);
+
+        .inputCEP{
+            grid-column: 1/3;
+        }
+
+        .inputStreet{
+            grid-column: 3/5;
+        }
+
+        .inputComplement{
+            grid-column: 1/5;
+        }
+    }
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+
+        input{
+            width: 40vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        input{
+            width: 100%;
+        }
+    }
+}
+
+@mixin responsive-formDataSaju{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 10vw);
+    
+        .inputEntryDuty{
+            grid-column: 1/3;
+        }
+
+        .inputExitDuty{
+            grid-column: 3/5;
+        }
+
+        .inputEntrySaju{
+            grid-column: 1/5;
+        }
+    }
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+
+        input{
+            width: 40vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        input{
+            width: 100%;
+        }
+    }
+}
+
+@mixin responsive-containerComissions{
+    @media (max-width: 1300px){
+        .containerContents{
+            width: 50%;
+            align-self: center;
+        }
+    }
+    
+    @media (max-width: 600px){
+        width: 85vw;
+        align-self: center;
+    
+        h4{
+            text-align: inherit;
+        }
+        .containerContents{
+            width: 100%;
+        }
+    }
+}
+
+.containerMain{
+    display: flex;
+    flex-direction: column;
+    max-width: 1300px;
+    margin: 50px auto;
+
+    h3, h4{
+        font-family: 'Roboto Slab';
+    }
+
+    @include responsive-containerMain;
+}
+
+.containerForms{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 27px;
+
+    @include responsive-containerForms;
+}
+
+.sectionForm{
+    display: flex;
+    flex-direction: column;
+    width: 635px;
+    margin-top: 20px;
+    
+    span{
+        margin-bottom: 5px;
+        margin-left: 13px;
+    }
+
+    label{
+        display: flex;
+        flex-direction: column;
+        font-family: 'Roboto';
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    input{
+        height: 50px;
+        padding: 0 0 0 10px;
+        border-radius: 5px;
+        border: 1px solid #777;
+        font-size: 16px;
+    }
+
+    @include responsive-sectionForm;
+}
+
+
+.formPersonal{
+    display: grid;
+    grid-template-columns: 150px 60px 90px 120px 195px;
+    column-gap: 5px;
+    row-gap: 10px;
+    margin-top: 20px;
+
+    .inputFull{
+        grid-column: 1/6;
+    }
+
+    .inputCpf{
+        grid-column: 1/2;
+    }
+
+    .inputRg{
+        grid-column: 2/4;
+    }
+
+    .inputSkinColor{
+        grid-column: 1/3;
+    }
+
+    .inputGender{
+        grid-column: 3/5;
+    }
+
+    .inputPhone{
+        grid-column: 1/3;
+    }
+
+    .inputEmail{
+        grid-column: 3/6;
+    }
+    
+    .inputType{
+        grid-column: 1/4;
+    }
+
+    .inputStatus{
+        grid-column: 4/6;
+    }
+
+    @include responsive-formPersonal;
+}
+
+.formAddress{
+    display: grid;
+    grid-template-columns: 125px 85px 170px 240px;
+    column-gap: 5px;
+    row-gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+
+    .inputCep{
+        grid-column: 1/3;
+    }
+
+    .inputStreet{
+        grid-column: 3/5;
+    }
+
+    .inputNeighbor{
+        grid-column: 2/4;
+    }
+
+    @include responsive-formPersonal;
+}
+
+.formDataSaju{
+    display: grid;
+    grid-template-columns: 210px 115px 300px;
+    column-gap: 5px;
+    row-gap: 10px;
+    margin-top: 22px;
+
+    .inputEntryDuty{
+        grid-column: 1/3;
+    }
+
+    @include responsive-formDataSaju;
+}
+
+.containerComissions{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+
+    h4{
+        text-align: center;
+    }
+
+    .containerContents{
+        display: flex;
+        flex-direction: row;
+        width: 54.5%;
+        margin-top: 40px;
+        justify-content: space-between;
+    }
+
+    .areaBtn{
+        display: flex;
+        flex-direction: row;
+        margin: 0 auto;
+        column-gap: 20px;
+    }
+
+    .btnEdit, .btnBack{
+        margin: 50px auto 0;
+        font-size: 20px;
+        font-family: 'Roboto Slab';
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: 0;
+        background-color: $primary-color;
+        color: $light-color;
+    }
+
+    .btnEdit{
+        width: 221px;
+        height: 46px;
+    }
+
+    @include responsive-containerComissions;
+}
+
+
+.content{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Roboto';
+
+    h5{
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    p{
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+}

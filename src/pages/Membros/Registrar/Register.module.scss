@@ -1,0 +1,487 @@
+@import '../../../variables.scss';
+
+@mixin responsive-containerMain{
+    @media (max-width: 1300px){
+        h3{
+            margin-left: 14vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        margin: 20px auto;
+        h3{
+            margin-left: 5vw;
+            margin-bottom: -5vw;
+        }
+    }
+}
+
+@mixin responsive-containerForms{
+    @media (max-width: 1300px){
+        width: 90%;
+        margin: 27px auto;
+    }
+
+    @media (max-width: 600px){
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@mixin responsive-sectionForm{
+    @media (max-width: 1300px){
+        width: 50%;
+    }
+
+    @media (max-width: 768px){
+        width: auto;
+    }
+}
+
+@mixin responsive-formPersonal{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 10vw);
+
+        .inputFull{
+            grid-column: 1/5;
+        }
+
+        .inputCPF{
+            grid-column: 1/3;
+        }
+
+        .inputRG{
+            grid-column: 3/5;
+        }
+
+        .inputSender{
+            grid-column: 1/2;
+        }
+
+        .inputBorn{
+            grid-column: 2/5;
+        }
+
+        .inputOrientationSex{
+            grid-column: 1/3;
+        }
+
+        .inputPhone{
+            grid-column: 3/5;
+        }
+
+        .inputEmail{
+            grid-column: 1/5;
+        }
+
+        .inputStatus{
+            grid-column: 4/5;
+        }
+    }
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+
+        input{
+            width: 40vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        input{
+            width: 100%;
+        }
+    }
+}
+
+@mixin responsive-formAddress{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 10vw);
+
+        .inputCEP{
+            grid-column: 1/3;
+        }
+
+        .inputStreet{
+            grid-column: 3/5;
+        }
+
+        .inputComplement{
+            grid-column: 1/5;
+        }
+    }
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+
+        input{
+            width: 40vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        input{
+            width: 100%;
+        }
+    }
+}
+
+@mixin responsive-formDataSaju{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 10vw);
+    
+        .inputEntryDuty{
+            grid-column: 1/3;
+        }
+
+        .inputExitDuty{
+            grid-column: 3/5;
+        }
+
+        .inputEntrySaju{
+            grid-column: 1/5;
+        }
+
+        .inputTriunvirate{
+            grid-column: 1/3;
+        }
+    }
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+
+        input{
+            width: 40vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        input{
+            width: 100%;
+        }
+    }
+}
+
+@mixin responsive-comissions{
+    @media (max-width: 1300px){
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    @media (max-width: 600px){
+        width: 90%;
+    }
+}
+
+@mixin responsive-containerCheckbox{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 0px;
+        width: 100%;
+    }
+
+    @media (max-width: 768px){
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 600px){
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.containerMain{
+    display: flex;
+    flex-direction: column;
+    margin: 50px auto;
+    max-width: 1300px;
+
+    h3, h4{font-family: 'Roboto Slab';}
+
+    @include responsive-containerMain;
+}
+
+.containerForms{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+
+    @include responsive-containerForms;
+}
+
+.sectionForm{
+    display: flex;
+    flex-direction: column;
+    width: 635px;
+    margin-top: 20px;
+    
+    input{
+        height: 50px;
+        padding: 0 0 0 10px;
+        border-radius: 5px;
+        border: 1px solid #777;
+        font-size: 16px;
+        font-family: 'Roboto';
+        font-weight: 400;
+    }
+
+    p{
+        display: flex;
+        align-items: center;
+        color: #777;
+        font-size: 16px;
+        margin: 26px auto;
+    }
+
+    svg{
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        color: $primary-color-dark;
+    }
+
+    @include responsive-sectionForm;
+}
+
+.formPersonal{
+    display: grid;
+    grid-template-columns: 150px 50px 95px 115px 205px;
+    column-gap: 5px;
+    row-gap: 10px;
+    margin-top: 20px;
+
+    .inputFull{
+        grid-column: 1/6;
+    }
+
+    .inputCPF{
+        grid-column: 1/2;
+    }
+
+    .inputRG{
+        grid-column: 2/4;
+    }
+
+    .inputSender{
+        grid-column: 4/5;
+    }
+    
+    .inputSkin{
+        grid-column: 1/3;
+    }
+
+    .inputGender{
+        grid-column: 3/5;
+    }
+
+    .inputPhone{
+        grid-column: 1/3;
+    }
+
+    .inputEmail{
+        grid-column: 3/6;
+    }
+
+    .inputType{
+        grid-column: 1/4;
+    }
+
+    .inputStatus{
+        grid-column: 4/6;
+    }
+
+    @include responsive-formPersonal;
+
+    input:required {
+        border-left: 3px solid $primary-color;
+    }
+
+    input:invalid {
+        border-color: #ff4444;
+    }
+}
+
+.formAddress{
+    display: grid;
+    margin: 19px 0;
+    column-gap: 5px;
+    row-gap: 10px;
+    grid-template-columns: 125px 90px 40px 100px;
+
+    .inputCEP{
+        grid-column: 1/3;
+    }
+
+    .inputStreet{
+        grid-column: 3/6;
+    }
+
+    .inputNumber{
+        grid-column: 1/2;
+    }
+
+    .inputNeighbor{
+        grid-column: 2/5;
+    }
+
+    @include responsive-formAddress;
+}
+
+.formDataSaju{
+    display: grid;
+    margin-top: 20px;
+    column-gap: 5px;
+    row-gap: 10px;
+    grid-template-columns: 200px 100px 325px;
+
+    .inputEntryDuty{
+        grid-column: 1/3;
+    }
+
+    @include responsive-formDataSaju;
+}
+
+.commissions{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+
+    p{
+        margin-top: 10px;
+        font-size: 20px;
+        font-family: 'Roboto Slab';
+        font-weight: 400;
+    }
+
+    @include responsive-comissions;
+}
+
+.containerCheckbox{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    row-gap: 40px;
+    column-gap: 90px;
+    align-self: flex-start;
+    margin-top: 40px;
+    width: 1187px;
+    
+
+    label{
+        position: relative;
+    }
+
+    input{
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .textCheckbox{
+        margin-left: 32px;
+        font-size: 16px;
+        font-family: 'Roboto';
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        border: 2px solid $primary-color;
+        border-radius: 5px;
+    }
+
+    input:checked ~ .checkmark {
+        background-color: $primary-color;
+    }
+
+    input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    .checkmark:after {
+        left: 5px;
+        top: 0px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        transform: rotate(45deg);
+    }
+
+    @include responsive-containerCheckbox;
+}
+
+.areaBtn{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    width: 292px;
+
+    button{
+        background-color: $primary-color;
+        color: $light-color;
+        font-family: 'Roboto Slab';
+        font-size: 20px;
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 20px;
+    }
+
+    button[type="submit"] {
+        &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.memberTypeSelector {
+    grid-column: 1/6;
+    margin-bottom: 20px;
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-family: 'Roboto Slab';
+        font-size: 16px;
+    }
+}
+
+.memberTypeButtons {
+    display: flex;
+    gap: 20px;
+}
+
+.typeBtn {
+    padding: 10px 30px;
+    font-family: 'Roboto Slab';
+    font-size: 16px;
+    border: 2px solid $primary-color;
+    background: transparent;
+    color: $primary-color;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: $primary-color;
+        color: white;
+    }
+
+    &.active {
+        background: $primary-color;
+        color: white;
+    }
+}

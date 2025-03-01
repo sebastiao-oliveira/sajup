@@ -1,0 +1,417 @@
+@import '../../../variables.scss';
+
+@mixin responsive-containerMain{
+    @media (max-width: 1300px){
+        h3{
+            margin-left: 14vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        margin: 20px auto;
+        h3{
+            margin-left: 5vw;
+            margin-bottom: -5vw;
+        }
+    }
+}
+
+@mixin responsive-containerForms{
+    @media (max-width: 1300px){
+        width: 90%;
+        margin: 27px auto;
+    }
+
+    @media (max-width: 600px){
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@mixin responsive-sectionForm{
+    @media (max-width: 1300px){
+        width: 50%;
+    }
+
+    @media (max-width: 768px){
+        width: auto;
+    }
+}
+
+@mixin responsive-formPersonal{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 10vw);
+
+        .inputFull{
+            grid-column: 1/5;
+        }
+
+        .inputCpf{
+            grid-column: 1/3;
+        }
+
+        .inputRg{
+            grid-column: 3/5;
+        }
+
+        .inputSender{
+            grid-column: 1/2;
+        }
+
+        .inputBorn{
+            grid-column: 2/5;
+        }
+
+        .inputOrientationSex{
+            grid-column: 1/3;
+        }
+
+        .inputPhone{
+            grid-column: 3/5;
+        }
+
+        .inputEmail{
+            grid-column: 1/5;
+        }
+
+        .inputStatus{
+            grid-column: 4/5;
+        }
+    }
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+
+        input{
+            width: 40vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        input{
+            width: 100%;
+        }
+    }
+}
+
+@mixin responsive-formAddress{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 10vw);
+
+        .inputCEP{
+            grid-column: 1/3;
+        }
+
+        .inputStreet{
+            grid-column: 3/5;
+        }
+
+        .inputComplement{
+            grid-column: 1/5;
+        }
+    }
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+
+        input{
+            width: 40vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        input{
+            width: 100%;
+        }
+    }
+}
+
+@mixin responsive-formDataSaju{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 10vw);
+    
+        .inputEntryDuty{
+            grid-column: 1/3;
+        }
+
+        .inputExitDuty{
+            grid-column: 3/5;
+        }
+
+        .inputEntrySaju{
+            grid-column: 1/5;
+        }
+    }
+
+    @media (max-width: 768px){
+        display: flex;
+        flex-direction: column;
+
+        input{
+            width: 40vw;
+        }
+    }
+
+    @media (max-width: 600px){
+        input{
+            width: 100%;
+        }
+    }
+}
+
+@mixin responsive-comissions{
+    @media (max-width: 1300px){
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    @media (max-width: 600px){
+        width: 90%;
+    }
+}
+
+@mixin responsive-containerCheckbox{
+    @media (max-width: 1300px){
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 0px;
+        width: 100%;
+    }
+
+    @media (max-width: 768px){
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 600px){
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.containerMain{
+    display: flex;
+    flex-direction: column;
+    max-width: 1300px;
+    margin: 50px auto;
+
+    h3, h4{
+        font-family: 'Roboto Slab';
+    }
+
+    @include responsive-containerMain;
+}
+
+.containerForms{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 27px;
+
+    @include responsive-containerForms;
+}
+
+.sectionForm{
+    display: flex;
+    flex-direction: column;
+    width: 635px;
+    margin-top: 20px;
+    
+    span{
+        margin-bottom: 5px;
+        margin-left: 13px;
+    }
+    
+    label{
+        display: flex;
+        flex-direction: column;
+        font-family: 'Roboto';
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    input{
+        height: 50px;
+        padding: 0 0 0 10px;
+        border-radius: 5px;
+        border: 1px solid #777;
+        font-size: 16px;
+    }
+
+    @include responsive-sectionForm;
+}
+
+
+.formPersonal{
+    display: grid;
+    grid-template-columns: 150px 60px 90px 120px 195px;
+    column-gap: 5px;
+    row-gap: 10px;
+    margin-top: 20px;
+
+    .inputFull{
+        grid-column: 1/6;
+    }
+
+    .inputCpf{
+        grid-column: 1/2;
+    }
+
+    .inputRg{
+        grid-column: 2/4;
+    }
+
+    .inputSkinColor{
+        grid-column: 1/3;
+    }
+
+    .inputGender{
+        grid-column: 3/5;
+    }
+
+    .inputPhone{
+        grid-column: 1/3;
+    }
+
+    .inputEmail{
+        grid-column: 3/6;
+    }
+    
+    .inputType{
+        grid-column: 1/4;
+    }
+
+    .inputStatus{
+        grid-column: 4/6;
+    }
+
+    @include responsive-formPersonal;
+}
+
+.formAddress{
+    display: grid;
+    grid-template-columns: 125px 85px 170px 240px;
+    column-gap: 5px;
+    row-gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+
+    .inputCep{
+        grid-column: 1/3;
+    }
+
+    .inputStreet{
+        grid-column: 3/5;
+    }
+
+    .inputNeighbor{
+        grid-column: 2/4;
+    }
+
+    @include responsive-formAddress;
+}
+
+.formDataSaju{
+    display: grid;
+    grid-template-columns: 210px 115px 300px;
+    column-gap: 5px;
+    row-gap: 10px;
+    margin-top: 22px;
+
+    .inputEntryDuty{
+        grid-column: 1/3;
+    }
+
+    @include responsive-formDataSaju;
+} 
+
+.commissions{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+
+    p{
+        margin-top: 10px;
+        font-size: 20px;
+        font-family: 'Roboto Slab';
+        font-weight: 400;
+    }
+
+    @include responsive-comissions;
+}
+
+.containerCheckbox {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+    width: 100%;
+    
+    label {
+        position: relative;
+        padding-left: 28px;
+        cursor: pointer;
+        user-select: none;
+        font-size: 16px;
+        font-family: 'Roboto';
+        line-height: 20px;
+
+        input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            border: 2px solid $primary-color;
+            border-radius: 5px;
+        }
+
+        input:checked ~ .checkmark {
+            background-color: $primary-color;
+        }
+
+        input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 5px;
+            top: 0px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        .textCheckbox {
+            margin-left: 8px;
+        }
+    }
+}
+
+.areaBtn{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    width: 292px;
+
+    button{
+        background-color: $primary-color;
+        color: $light-color;
+        font-family: 'Roboto Slab';
+        font-size: 20px;
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 20px;
+    }
+}

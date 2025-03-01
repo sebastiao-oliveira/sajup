@@ -1,0 +1,84 @@
+.containerMain {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+.sidebar {
+    width: 200px;
+    background: #f4f4f4;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.active {
+    background: #8b0000;
+    color: white;
+    border-radius: 5px;
+}
+
+.chatContainer {
+    flex-grow: 2;
+    background: #f8e8e8;
+    padding: 15px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chatBox {
+    height: 200px;
+    overflow-y: auto;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.inputMessage {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.membersList {
+    width: 200px;
+    background: #f4f4f4;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.addMemberBtn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: #8b0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

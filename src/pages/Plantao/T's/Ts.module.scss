@@ -1,0 +1,258 @@
+@import '../../../variables.scss';
+@import url('https://fonts.googleapis.com/css2?family=Vibur&display=swap');
+
+.containerMain{
+    display: flex;
+    flex-direction: column;
+    max-width: 1300px;
+    margin: 50px auto;
+    font-family: 'Roboto slab';
+}
+
+.infoDutyHeader{
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    font-family: 'Roboto';
+    
+    .tags{
+        display: flex;
+        flex-direction: row;
+        column-gap: 40px;
+        margin-bottom: 20px;
+    }
+
+    div{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        background-color: $primary-color-dark;
+        color: $light-color;
+        padding: 10px 15px;
+        border-radius: 20px;
+    }
+
+    svg{
+        width: 28px;
+        height: 28px;
+        margin-right: 20px;
+    }
+}
+
+.triunvirateTitle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 50px;
+    position: absolute;
+    left: 0%;
+    transform: translateY(196px);
+    font-family: 'Roboto';
+    background-color: $primary-color-dark;
+    color: $light-color;
+}
+
+.containerCards{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1074px;
+    gap: 20px;
+    margin: 80px auto;
+}
+
+.detailsTriunvirateCard{
+    display: flex;
+    flex-direction: column;
+    width: 526px;
+    max-height: 700px;
+    background-color: rgba(15, 8, 77, 0.05);
+    border: 5px solid $primary-color-dark;
+    font-family: 'Roboto';
+
+    .tagTs{
+        width: 14%;
+        font-family: 'Vibur';
+        font-weight: normal;
+        color: $light-color;
+        background-color: $primary-color-dark;
+        border-radius: 0px 0px 30px 0px;
+        padding: 10px;
+    }
+}
+
+.areaBtns{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    .btnsCard{
+        width: 200px;
+        background-color: $primary-color;
+        color: $light-color;
+        font-size: 20px;
+        font-family: 'Roboto';
+        font-weight: 700;
+        padding: 10px 20px;
+        border-radius: 20px;
+        border: 0;
+        margin-top: auto;
+    }
+}
+
+.contentCard{
+    display: flex;
+    flex-direction: column;
+    margin: 10px auto;
+    flex: 1;
+
+    h6{
+        color: $primary-color-dark;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    h6.monitorTitle{
+        margin-top: 40px;        
+    }
+
+    h6.assistidosTitle{
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+
+    p{
+        font-size: 20px;
+        margin-top: 10px;
+    }
+
+    p.contentMonitor{
+        margin-top: 0px;
+        margin-bottom: 16px;
+        font-style: italic;
+    }
+}
+
+.containerEditTriunvirate{
+    display: flex;
+    flex-direction: column;
+    grid-column: 1/3;
+    margin: 40px 0;
+
+    .areaInputEditTriunvirate{
+        display: flex;
+        flex-direction: column;
+        margin-top: 5px;
+    
+        p{
+            font-size: 14px;
+            font-weight: 700;
+            margin-left: 15px;
+        }
+    
+        button{
+            font-family: 'Roboto';
+            font-weight: 700;
+            background-color: $primary-color;
+            height: 50px;
+            border-radius: 20px;
+            margin-left: 20px;
+        }
+    
+        input{
+            height: 50px;
+            font-size: 16px;
+            color: #777;
+            border-radius: 5px;
+        }
+    
+    }
+}
+
+.labelInputSajuano{
+    input{
+        width: 68%;
+    }
+
+    button{
+        width: 30%;
+    }
+}
+
+
+.containerEditDuty{
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    margin-bottom: 40px;    
+}
+
+.containerInputs{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    
+    .labelInput{
+        display: flex;
+        flex-direction: column;
+        font-family: 'Roboto';
+
+        span{
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            margin-left: 15px;
+        }
+        
+        input{
+            width: 200px;
+            height: 50px;
+            border: 1px solid #777;
+            border-radius: 5px;
+            font-size: 16px;
+            padding: 0 15px;
+        }
+
+        .inputCoordinator{
+            width: 400px;
+        }
+    }
+}
+
+.containerButtons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 23%;
+        height: 43px;
+        padding: 10px 20px;
+        border-radius: 20px;
+        color: $primary-color;
+        background-color: transparent;
+        border: 2px solid $primary-color;
+        font-family: 'Roboto';
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    button.saveDuty{
+        background-color: $primary-color;
+        color: $light-color;
+    }
+
+    svg{
+       width: 25px; 
+       height: 25px;
+       margin-right: 8px;
+    }
+}

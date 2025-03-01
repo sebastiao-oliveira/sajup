@@ -1,0 +1,144 @@
+@import '../../variables.scss';
+@import '../../mixin/mixin.scss';
+
+@mixin responsive-tablet-mobile-containerFooter{
+    @media (max-width: 1263px) {
+        height: 272px;
+    }
+}
+
+@mixin responsive-tablet-mobile-contentFooter{
+    @media (max-width: 1263px) {
+        width: 90%;
+        height: 90%;        
+        justify-content: space-between;
+    }
+}
+
+@mixin responsive-tablet-mobile-copy{
+    @media (max-width: 1263px){
+        width: 121px;
+        height: 80px;
+
+        p{
+            display: none;
+        }
+
+        img{
+            width: 100%;
+        }
+
+    }
+}
+
+@mixin responsive-tablet-mobile-socials{
+    @media (max-width: 1263px){
+        display: flex;
+        margin-top: 24px;
+        flex-direction: row;
+        width: 140px;
+        height: 30px;
+    }
+}
+
+@mixin responsive-tablet-mobile-contacts{
+    @media (max-width: 1263px){
+        display: flex;
+        flex-direction: column;
+        width: 90vw;
+        margin-top: 16px;
+        row-gap: 16px;
+    }
+}
+
+@mixin responsivel-mobile-icon-location{
+    @media (max-width: 500px){
+        #divLocation{
+            svg{
+                width: 60px;
+                height: 60px;
+            }    
+        }
+    }
+}
+
+.footerContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    background-color: $primary-color-dark;
+    font-family: 'Roboto';
+
+    @include responsive-tablet-mobile-containerFooter;
+}
+
+.contentFooter{
+    width: 1300px;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+
+    svg{
+        color: $light-color;
+        width: 30px;
+        height: 30px;
+    }
+
+    @include responsive-tablet-mobile-contentFooter;
+
+}
+
+.copy{
+    display: flex;
+    width: 600px;
+    height: 60px;
+    align-items: center;
+
+    p, span{
+        color: $light-color;
+    }
+
+    p{
+        margin-left: 40px;
+    }
+
+    img{
+        width: 90px;
+        height: 60px;
+    }
+
+    @include responsive-tablet-mobile-copy;
+}
+
+
+.socials{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+    justify-content: space-between;
+    height: 128px;
+    position: absolute;
+
+    @include responsive-tablet-mobile-socials;
+}
+
+.contacts{
+    display: flex;
+    width: 1200px;
+    gap: 60px;
+    margin-top: 57px;
+
+    span{
+        margin-left: 10px;
+        color: $light-color;
+    }
+    
+    div{
+        display: flex;
+        align-items: center;
+    }
+
+    @include responsive-tablet-mobile-contacts;
+    @include responsivel-mobile-icon-location;
+}

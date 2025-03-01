@@ -1,0 +1,59 @@
+@import '../../variables.scss';
+
+@mixin responsive-tablet-mobile-headerContainer{
+    @media (max-width: 1263px){
+        gap: 0;
+
+        img{
+            align-self: center;
+        }
+
+        .navLinks{
+            display: none;
+        }
+
+        svg{
+            display: flex;
+            position: absolute;
+            right: 20px;
+        }
+    }
+}
+
+.headerContainer{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    background-color: $primary-color;
+    justify-content: center;
+    gap: 152px;
+    padding: 0 112px;
+
+    img{
+        width: 90px;
+        height: 60px;
+    }
+
+    .navLinks{
+        width: 1075px;
+        display: flex;
+        justify-content: space-between;
+        font-family: 'Roboto Slab';
+        font-weight: 400;
+    }
+
+    a{
+        color: $light-color;
+        font-size: 20px;
+    }
+
+    svg{
+        display: none;
+        width: 40px;
+        height: 40px;
+        color: $light-color;
+    }
+
+    @include responsive-tablet-mobile-headerContainer;
+}

@@ -1,0 +1,151 @@
+@import '../../variables.scss';
+
+@mixin reponsive-cotainerMain{
+    @media (max-width: 1300px){
+        width: 90%;
+    }
+}
+
+@mixin responsive-containerCards{
+    @media (max-width: 768px) {
+        width: 308px;
+        align-self: center;
+    }
+}
+
+@mixin responsive-addDuty{
+    @media (max-width: 1300px){
+        .areaForm{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            row-gap: 20px;
+        }
+    }
+
+    @media (max-width: 1010px){
+        .areaForm{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+        }
+    }
+
+    @media (max-width: 768px){
+        .areaForm{
+            display: flex;
+            flex-direction: column;
+
+            input.coordinator{
+                width: 100%;
+            }
+        }
+    }
+}
+
+button{
+    padding: 10px 20px;
+    color: $light-color;
+    background-color: $primary-color;
+    border-radius: 10px;
+    border: 0;
+    font-family: 'Roboto Slab';
+    font-size: 20px;
+}
+
+.containerMain{
+    display: flex;
+    flex-direction: column;
+    margin: 50px auto 100px;
+    max-width: 1300px;
+    width: 1300px;
+    height: auto;
+
+    @include reponsive-cotainerMain
+}
+
+.containerHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    font-family: 'Roboto Slab';
+}
+
+.containerCards{
+    display: flex;
+    flex-direction: row;
+    gap: 40px 22px;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 32px;
+
+    .containerCard{
+        display: flex;
+        flex-direction: column;
+
+        .day{
+            font-family: 'Roboto Slab';
+        }
+    }
+
+    @include responsive-containerCards;
+}
+
+.card{
+    display: flex;
+    flex-direction: row;
+    width: 308px;
+    height: 120px;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    color: $light-color;
+    background-color: $primary-color-dark;
+    
+    a{
+        align-self: flex-end;
+        transform: translate(25%);
+        margin: 0 auto;
+        font-weight: 700;
+    }
+
+    p{
+        font-size: 20px;
+    }
+}
+
+.addDuty{
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+
+    h4{
+        font-family: 'Roboto Slab';
+    }
+
+    .areaBtn{
+        display: flex;
+        flex-direction: row;
+        margin: 40px auto;
+        column-gap: 10px;
+    }
+
+    @include responsive-addDuty;
+}
+
+.areaForm{
+    display: flex;
+    column-gap: 20px;
+    margin-top: 20px;
+
+    input{
+        border-radius: 5px;
+        border: 1px solid #777;
+        height: 50px;
+        font-size: 16px;
+        padding: 0 15px;
+    }
+
+    input.coordinator{
+        width: 400px;
+    }
+}

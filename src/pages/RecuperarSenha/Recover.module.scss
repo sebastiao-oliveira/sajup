@@ -1,0 +1,137 @@
+@import '../../variables.scss';
+
+@mixin responsive-tablet-mobile-containerLogin{
+    @media (max-width: 1263px){
+        margin: 20px auto;
+        width: 90%;
+        height: 446px;
+        justify-content: center;
+
+        img{
+            display: none;
+        }
+    }
+}
+
+@mixin responsive-tablet-mobile-formContainer{
+    @media (max-width: 1263px){
+        justify-content: space-around;
+        gap: 0;
+
+        h4{
+            margin: 0;
+        }
+
+        img{
+            margin: 0;
+            display: flex;
+            width: 237px;
+            height: 150px;
+        }
+
+        input{
+            width: 290px;
+            font-size: 12px;
+            height: 50px;
+            align-self: center;
+        }
+
+        button{
+            width: 295px;
+            height: 40px;
+        }
+    }
+}
+
+.headerLogin{
+    display: flex;
+    width: 100%;
+    background-color: $primary-color;
+    height: 80px;
+    justify-content: center;
+    align-items: center;
+
+    img{
+        width: 90px;
+        height: 60px;
+    }
+}
+
+.containerLogin{
+    display: flex;
+    margin: 50px auto;
+    width: 1290px;
+    border-radius: 20px;
+    height: 669px;
+    background-color: $light-color;
+    box-shadow: 4px 0px 4px 0px rgba(0, 0, 0, 0.25), 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    font-family: 'Roboto';
+
+    img{
+        width: 873px;
+        height: 669px;
+    }
+
+    @include responsive-tablet-mobile-containerLogin;
+}
+
+.formContainer{
+    display: flex;
+    width: 417px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #D9D9D9;
+    text-align: center;
+    justify-content: start;
+    row-gap: 48px;
+
+    h4{
+        font-family: 'Roboto Slab';
+        color: #000;
+        margin-top: 40px;
+    }
+
+    img{
+        margin-top: 48px;
+        width: 300px;
+        height: 200px;
+    }
+
+    form{
+        display: flex;
+        flex-direction: column;
+        span{
+            font-family: 'Roboto';
+            font-size: 14px;
+            font-weight: 700;
+            align-self: flex-start;
+            color: $primary-color-light;
+        }
+    }
+
+    input{
+        width: 377px;
+        height: 50px;
+        padding-left: 8px;
+        border-radius: 5px;
+        border: none;
+        margin-bottom: 8px;
+        font-size: 16px;
+        border: 1px solid rgba(0, 0, 0, 0.25);
+    }
+
+    button{
+        font-family: 'Roboto';
+        font-weight: 700;
+        font-size: 16px;
+        height: 40px;
+        background-color: $primary-color;
+        color: $light-color;
+        border: 0;
+        border-radius: 5px;
+        margin: 8px 0 16px 0;
+    }
+    
+    @include responsive-tablet-mobile-formContainer;
+}
