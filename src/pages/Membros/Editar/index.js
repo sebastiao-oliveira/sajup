@@ -203,25 +203,25 @@ const EditMember = () => {
                                 </label>
                             </div>
                         </section>
-                        <section className={styles.commissions}>
-                            <h4>Comissões</h4>
-                            <p>Se for o caso, selecione para inserir o membro em uma ou mais comissões</p>
-                            <section className={styles.containerCheckbox}>
-                                {commissionOptions.map(option => (
-                                    <label key={option}>
-                                        <input 
-                                            type="checkbox" 
-                                            value={option} 
-                                            checked={selectedCommissions.includes(option)}
-                                            onChange={handleCheckboxChange}
-                                        />
-                                        <span className={styles.checkmark}></span>
-                                        <span className={styles.textCheckbox}>{option}</span>
-                                    </label>
-                                ))}
-                            </section>
-                        </section>
                     </article>
+                    <section className={styles.commissions}>
+                        <h4>Comissões</h4>
+                        <p>Se for o caso, selecione para inserir o membro em uma ou mais comissões</p>
+                        <section className={styles.containerCheckbox}>
+                            {commissionOptions.map(option => (
+                                <label key={option}>
+                                    <input 
+                                        type="checkbox" 
+                                        value={option} 
+                                        checked={selectedCommissions.includes(option)}
+                                        onChange={handleCheckboxChange}
+                                    />
+                                    <span className={styles.checkmark}></span>
+                                    <span className={styles.textCheckbox}>{option}</span>
+                                </label>
+                            ))}
+                        </section>
+                    </section>
                     <section className={styles.areaBtn}>
                         <button type="submit" className={styles.btnConfirm}>
                             Confirmar
