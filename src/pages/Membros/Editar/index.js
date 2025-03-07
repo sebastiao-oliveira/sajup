@@ -1,10 +1,11 @@
-import { Link, useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { InputMask } from 'primereact/inputmask';
 import Header from "../../../components/Header"
 import Footer from "../../../components/Footer"
 import styles from './Edit.module.scss'
 import { useEffect, useState } from 'react'
 
+// Opções de comissões disponíveis
 const commissionOptions = [
     'Arquivo',
     'Capacitação',
@@ -18,12 +19,13 @@ const commissionOptions = [
 ]
 
 const EditMember = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [member, setMember] = useState(null);
-    const [selectedCommissions, setSelectedCommissions] = useState([]);
+    const { id } = useParams(); // Obtém o ID do membro a partir dos parâmetros da URL
+    const navigate = useNavigate(); // Hook para navegação
+    const [member, setMember] = useState(null); // Estado para armazenar os dados do membro
+    const [selectedCommissions, setSelectedCommissions] = useState([]); // Estado para armazenar as comissões selecionadas
 
     useEffect(() => {
+        // Função para carregar os dados do membro
         const loadMemberData = () => {
             const members = JSON.parse(localStorage.getItem('members')) || [];
             const foundMember = members.find(m => m.id === id);
@@ -39,6 +41,7 @@ const EditMember = () => {
         loadMemberData();
     }, [id, navigate]);
 
+    // Função para lidar com a mudança nos checkboxes das comissões
     const handleCheckboxChange = (e) => {
         const { value, checked } = e.target;
         if (checked) {
@@ -48,6 +51,7 @@ const EditMember = () => {
         }
     };
 
+    // Função para lidar com o envio do formulário
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -93,7 +97,7 @@ const EditMember = () => {
         }
     };
 
-    if (!member) return <p>Carregando...</p>;
+    if (!member) return <p>Carregando...</p>; // Exibe uma mensagem de carregamento enquanto os dados do membro são carregados
 
     return(
         <>
@@ -111,19 +115,39 @@ const EditMember = () => {
                                 </label>
                                 <label className={styles.inputCpf}>
                                     <span>CPF</span>
-                                    <InputMask mask="999.999.999-99" name="cpf" defaultValue={member.cpf}/>
+                                    <InputMask 
+                                        mask="999.999.999-99" 
+                                        name="cpf" 
+                                        value={member.cpf || ''} 
+                                        onChange={(e) => setMember({...member, cpf: e.value})}
+                                    />
                                 </label>
                                 <label className={styles.inputRg}>
                                     <span>RG</span>
-                                    <InputMask mask="99.999.999-999" name="rg" defaultValue={member.rg}/>
+                                    <InputMask 
+                                        mask="99.999.999-999" 
+                                        name="rg" 
+                                        value={member.rg || ''} 
+                                        onChange={(e) => setMember({...member, rg: e.value})}
+                                    />
                                 </label>
                                 <label>
                                     <span>Emissor</span>
-                                    <InputMask mask="XXX-XX" name="sender" defaultValue={member.sender}/>
+                                    <InputMask 
+                                        mask="XXX-XX" 
+                                        name="sender" 
+                                        value={member.sender || ''} 
+                                        onChange={(e) => setMember({...member, sender: e.value})}
+                                    />
                                 </label>
                                 <label className={styles.inputBorn}>
                                     <span>Data de nascimento</span>
-                                    <InputMask mask="99/99/9999" name="born" defaultValue={member.born}/>
+                                    <InputMask 
+                                        mask="99/99/9999" 
+                                        name="born" 
+                                        value={member.born || ''} 
+                                        onChange={(e) => setMember({...member, born: e.value})}
+                                    />
                                 </label>
                                 <label className={styles.inputSkinColor}>
                                     <span>Raça/Cor</span>
@@ -187,11 +211,21 @@ const EditMember = () => {
                             <div className={styles.formDataSaju}>
                                 <label className={styles.inputEntryDuty}>
                                     <span>Entrada no plantão</span>
-                                    <InputMask mask="99:99" name="entryDuty" defaultValue={member.entryDuty}/>
+                                    <InputMask 
+                                        mask="99:99" 
+                                        name="entryDuty" 
+                                        value={member.entryDuty || ''} 
+                                        onChange={(e) => setMember({...member, entryDuty: e.value})}
+                                    />
                                 </label>
                                 <label className={styles.inputExitDuty}>
                                     <span>Saída do plantão</span>
-                                    <InputMask mask="99:99" name="exitDuty" defaultValue={member.exitDuty}/>
+                                    <InputMask 
+                                        mask="99:99" 
+                                        name="exitDuty" 
+                                        value={member.exitDuty || ''} 
+                                        onChange={(e) => setMember({...member, exitDuty: e.value})}
+                                    />
                                 </label>
                                 <label className={styles.inputEntryDuty}>
                                     <span>Data de entrada no SAJU</span>

@@ -1,4 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom'
+// Removido: import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {BsPaperclip} from 'react-icons/bs'
 import { InputMask } from 'primereact/inputmask';
 import styles from './Register.module.scss'
@@ -12,8 +13,8 @@ const RegisterMember = () => {
     const [members, setMembers] = useState([])
 
     useEffect(() => {
-        const storedMembers = JSON.parse(localStorage.getItem('members')) || []
-        setMembers(storedMembers)
+      const storedMembers = JSON.parse(localStorage.getItem('members')) || []
+      setMembers(storedMembers)
     }, [])
 
     const handleSubmit = (e) => {
@@ -33,7 +34,9 @@ const RegisterMember = () => {
         }
 
         const newMember = {
-            id: Date.now().toString(),
+            // Alterado: O id agora é definido como o CPF do membro
+            // id: Date.now().toString(),
+            id: formData.get('cpf'), // id igual ao CPF
             memberType,
             name: formData.get('name'),
             cpf: formData.get('cpf'),
