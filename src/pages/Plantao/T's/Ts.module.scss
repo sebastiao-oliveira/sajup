@@ -256,3 +256,216 @@
        margin-right: 8px;
     }
 }
+
+.modalAddTriunvirato {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+
+    h4 {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    form {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+
+        button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Roboto Slab';
+            
+            &[type="submit"] {
+                background-color: $primary-color;
+                color: white;
+            }
+
+            &[type="button"] {
+                background-color: #ccc;
+                color: black;
+            }
+        }
+    }
+}
+
+.modalEditTriunvirato {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    h4 {
+        margin-bottom: 20px;
+        text-align: center;
+        font-family: 'Roboto Slab';
+    }
+
+    .modalHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .deleteBtn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Roboto Slab';
+
+            &:hover {
+                background-color: #cc0000;
+            }
+
+            svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+
+    .formGroup {
+        margin-bottom: 20px;
+
+        label {
+            display: block;
+            margin-bottom: 15px;
+
+            span {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                font-family: 'Roboto';
+            }
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Roboto';
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        small {
+            display: block;
+            margin-top: 4px;
+            color: #666;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .memberSelect {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Roboto';
+
+            &[multiple] {
+                height: 200px;
+            }
+
+            option {
+                padding: 8px;
+                
+                &:hover {
+                    background-color: $primary-color;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .modalButtons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+
+        button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Roboto Slab';
+            
+            &[type="submit"] {
+                background-color: $primary-color;
+                color: white;
+            }
+
+            &[type="button"] {
+                background-color: #ccc;
+                color: black;
+            }
+        }
+
+        .saveBtn {
+            background-color: $primary-color;
+            color: white;
+            
+            &:hover {
+                background-color: darken($primary-color, 10%);
+            }
+        }
+
+        .cancelBtn {
+            background-color: #ccc;
+            
+            &:hover {
+                background-color: #999;
+            }
+        }
+    }
+}
+
+.memberSelect {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Roboto';
+    min-height: 100px;
+    
+    &[multiple] {
+        height: 200px;
+    }
+
+    option {
+        padding: 8px;
+        
+        &:hover {
+            background-color: $primary-color;
+            color: white;
+        }
+    }
+}

@@ -1,4 +1,3 @@
-// Removido: import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import {BsPaperclip} from 'react-icons/bs'
 import { InputMask } from 'primereact/inputmask';
@@ -11,11 +10,20 @@ const RegisterMember = () => {
     const navigate = useNavigate()
     const [memberType, setMemberType] = useState('')
     const [members, setMembers] = useState([])
+    const [showOab, setShowOab] = useState(false);
+    const [oabData, setOabData] = useState({
+        number: '',
+        state: 'BA' // Estado padrão
+    });
 
     useEffect(() => {
       const storedMembers = JSON.parse(localStorage.getItem('members')) || []
       setMembers(storedMembers)
     }, [])
+
+    useEffect(() => {
+        setShowOab(memberType === 'monitor');
+    }, [memberType]);
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -26,17 +34,22 @@ const RegisterMember = () => {
         }
 
         const formData = new FormData(e.target)
-        const name = formData.get('name')
+        const cpf = formData.get('cpf')
         
-        if (!name) {
-            alert('Por favor, preencha pelo menos o nome do membro')
+        if (!cpf) {
+            alert('Por favor, preencha o CPF do membro')
             return
         }
 
+        if (memberType === 'monitor') {
+            if (!oabData.number || !oabData.state) {
+                alert('Por favor, preencha o número e estado da OAB')
+                return
+            }
+        }
+
         const newMember = {
-            // Alterado: O id agora é definido como o CPF do membro
-            // id: Date.now().toString(),
-            id: formData.get('cpf'), // id igual ao CPF
+            id: formData.get('cpf'),
             memberType,
             name: formData.get('name'),
             cpf: formData.get('cpf'),
@@ -51,6 +64,7 @@ const RegisterMember = () => {
             institution: formData.get('institution'),
             type: formData.get('type'),
             status: formData.get('status'),
+            oab: memberType === 'monitor' ? `${oabData.number}/${oabData.state}` : null,
             cep: formData.get('cep'),
             street: formData.get('street'),
             number: formData.get('number'),
@@ -104,7 +118,13 @@ const RegisterMember = () => {
                                     </div>
                                 </div>
                                 <input className={styles.inputFull} type='text' name='name' placeholder='Nome'/>
-                                <InputMask mask='999-999-999.99' className={styles.inputCPF} name='cpf' placeholder='CPF'/>
+                                <InputMask 
+                                    mask='999.999.999-99' 
+                                    className={styles.inputCPF} 
+                                    name='cpf' 
+                                    placeholder='CPF *' 
+                                    required
+                                />
                                 <InputMask mask='99999999 99' className={styles.inputRG} name='rg' placeholder='RG'/>
                                 <InputMask mask='XXX-XX' className={styles.inputSender} name='sender' placeholder='Emissor'/>
                                 <InputMask mask='99/99/9999' className={styles.inputBorn} name='born' placeholder='Data de nascimento'/>
@@ -116,6 +136,56 @@ const RegisterMember = () => {
                                 <input className={styles.inputFull} type='text' name='institution' placeholder='Instituição de Ensino'/>
                                 <input className={styles.inputType} type='text' name='type' placeholder='Tipo'/>
                                 <input className={styles.inputStatus} type='text' name='status' placeholder='Status'/>
+                                {showOab && (
+                                    <div className={styles.oabContainer}>
+                                        <label className={styles.inputOabNumber}>
+                                            <span>Número OAB *</span>
+                                            <input 
+                                                type="number" 
+                                                value={oabData.number}
+                                                onChange={(e) => setOabData({...oabData, number: e.target.value})}
+                                                placeholder="Número"
+                                                required
+                                            />
+                                        </label>
+                                        <label className={styles.inputOabState}>
+                                            <span>Estado OAB *</span>
+                                            <select 
+                                                value={oabData.state}
+                                                onChange={(e) => setOabData({...oabData, state: e.target.value})}
+                                                required
+                                            >
+                                                <option value="AC">AC</option>
+                                                <option value="AL">AL</option>
+                                                <option value="AM">AM</option>
+                                                <option value="AP">AP</option>
+                                                <option value="BA">BA</option>
+                                                <option value="CE">CE</option>
+                                                <option value="DF">DF</option>
+                                                <option value="ES">ES</option>
+                                                <option value="GO">GO</option>
+                                                <option value="MA">MA</option>
+                                                <option value="MG">MG</option>
+                                                <option value="MS">MS</option>
+                                                <option value="MT">MT</option>
+                                                <option value="PA">PA</option>
+                                                <option value="PB">PB</option>
+                                                <option value="PE">PE</option>
+                                                <option value="PI">PI</option>
+                                                <option value="PR">PR</option>
+                                                <option value="RJ">RJ</option>
+                                                <option value="RN">RN</option>
+                                                <option value="RO">RO</option>
+                                                <option value="RR">RR</option>
+                                                <option value="RS">RS</option>
+                                                <option value="SC">SC</option>
+                                                <option value="SE">SE</option>
+                                                <option value="SP">SP</option>
+                                                <option value="TO">TO</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                )}
                             </div>
                         </section>
                         <section className={styles.sectionForm}>

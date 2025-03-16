@@ -39,7 +39,8 @@ const Triunvirato = () => {
                     ))}
                 </section>
             </main>
-            <Footer />
+            
+          
         </>
     );
 };
