@@ -4,12 +4,32 @@ import styles from './Home.module.scss'
 import {FaUser} from 'react-icons/fa'
 import {PiFileTextFill} from 'react-icons/pi'
 import {AiFillSchedule} from 'react-icons/ai'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 
 const Home = () => {
     const [date, setDate] = useState()
-    
+    const [assistidos, setAssistidos] = useState([])
+    const [processos, setProcessos] = useState([])
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        // Fetch assistidos from localStorage
+        const storedAssistidos = JSON.parse(localStorage.getItem('assistidos')) || []
+        // Sort by date in descending order and get last 5
+        const recentAssistidos = storedAssistidos
+            .sort((a, b) => new Date(b.dataEntrada) - new Date(a.dataEntrada))
+            .slice(0, 5)
+        setAssistidos(recentAssistidos)
+
+        // Fetch processos from localStorage
+        const storedProcessos = JSON.parse(localStorage.getItem('processos')) || []
+        const recentProcessos = storedProcessos
+            .filter(p => p.status === 'Em andamento')
+            .slice(0, 3)
+        setProcessos(recentProcessos)
+    }, [])
+
     const getDate = () => {
         const fullDate = new Date()
         
@@ -43,6 +63,13 @@ const Home = () => {
         getDate()
     }, [])
 
+    const handleNavigateToAssistidos = () => {
+        navigate('/assistidos')
+    }
+
+    const handleNavigateToProcessos = () => {
+        navigate('/processos');
+    };
 
     return(
     <>
@@ -59,15 +86,16 @@ const Home = () => {
                         <span>Data de cadastro</span>
                     </div>
                     <ul>
-                        <li><p>Teste da Silva Sauro</p> <p>15/02/2023</p></li>
-                        <li><p>Teste da Silva Sauro</p> <p>14/02/2023</p></li>
-                        <li><p>Teste da Silva Sauro</p> <p>13/02/2023</p></li>
-                        <li><p>Teste da Silva Sauro</p> <p>12/02/2023</p></li>
-                        <li><p>Teste da Silva Sauro</p> <p>11/02/2023</p></li>
+                        {assistidos.map(assistido => (
+                            <li key={assistido.id}>
+                                <p>{assistido.nome}</p>
+                                <p>{new Date(assistido.dataEntrada).toLocaleDateString('pt-BR')}</p>
+                            </li>
+                        ))}
                     </ul>
                     <div className={styles.buttons}>
-                        <button>Cadastrar novo assistido</button>
-                        <button>Ver todos assistidos</button>
+                        <button onClick={handleNavigateToAssistidos}>Cadastrar novo assistido</button>
+                        <button onClick={handleNavigateToAssistidos}>Ver todos assistidos</button>
                     </div>
                 </section>
 
@@ -75,14 +103,15 @@ const Home = () => {
                     <h4>Processos em andamento</h4>
                     <PiFileTextFill/>
                     <div className={styles.infoContent2}>
-                        <p>Nome do processo - Nº do processo</p>
-                        <a>Ver detalhes</a>
-                        <p>Nome do processo - Nº do processo</p>
-                        <a>Ver detalhes</a>
-                        <p>Nome do processo - Nº do processo</p>
-                        <a>Ver detalhes</a>
+                        {processos.map(processo => (
+                            <React.Fragment key={processo.id}>
+                                <p>{processo.nome} - {processo.numero}</p>
+                                <a onClick={handleNavigateToProcessos} style={{cursor: 'pointer'}}>Ver detalhes</a>
+                            </React.Fragment>
+                        ))}
+                        {processos.length === 0 && <p>Nenhum processo em andamento</p>}
                     </div>
-                    <button>Ver todos os processos</button>
+                    <button onClick={handleNavigateToProcessos}>Ver todos os processos</button>
                 </section>
 
                 <section className={styles.content3}>

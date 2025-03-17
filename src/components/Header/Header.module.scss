@@ -36,6 +36,20 @@
     }
 }
 
+.logoutButton {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+    font-family: inherit;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 @media (max-width: 1263px){
     .headerContainer {
         gap: 0;
