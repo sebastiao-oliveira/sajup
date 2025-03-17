@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from './Assistidos.module.scss';
 import { FaSearch, FaEdit, FaTrash, FaEye, FaUserPlus, FaTimes } from 'react-icons/fa';
 
 const Assistidos = () => {
+    const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
     const [assistidos, setAssistidos] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -15,11 +17,19 @@ const Assistidos = () => {
         numeroProcesso: '',
         status: 'Ativo'
     });
+    const [notification, setNotification] = useState('');
 
     useEffect(() => {
         const storedAssistidos = JSON.parse(localStorage.getItem('assistidos')) || [];
         setAssistidos(storedAssistidos);
     }, []);
+
+    useEffect(() => {
+        if (location.state?.fromProcessos) {
+            setNotification(location.state.message);
+            setShowForm(true);
+        }
+    }, [location]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -74,6 +84,11 @@ const Assistidos = () => {
         <>
             <Header />
             <main className={styles.containerMain}>
+                {notification && (
+                    <div className={styles.notification}>
+                        {notification}
+                    </div>
+                )}
                 <div className={styles.header}>
                     <h2>Gerenciamento de Assistidos</h2>
                     <button className={styles.addButton} onClick={() => setShowForm(true)}>

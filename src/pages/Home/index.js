@@ -1,10 +1,11 @@
+import React from "react"
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
 import styles from './Home.module.scss'
 import {FaUser} from 'react-icons/fa'
 import {PiFileTextFill} from 'react-icons/pi'
 import {AiFillSchedule} from 'react-icons/ai'
-import { Link, useNavigate } from "react-router-dom"
+import {  useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 
 const Home = () => {

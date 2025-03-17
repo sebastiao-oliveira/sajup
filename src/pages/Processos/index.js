@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from './Processo.module.scss';
 import { FaSearch, FaEdit, FaTrash, FaEye, FaPlus, FaTimes } from 'react-icons/fa';
 
 const Processos = () => {
+    const navigate = useNavigate();
     const [processos, setProcessos] = useState([]);
     const [assistidos, setAssistidos] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [showForm, setShowForm] = useState(false);
+    const [searchAssistido, setSearchAssistido] = useState('');
+    const [selectedAssistido, setSelectedAssistido] = useState(null);
     const [formData, setFormData] = useState({
         nome: '',
         numero: '',
@@ -68,13 +72,70 @@ const Processos = () => {
         }
     };
 
+    const handleAssistidoSelect = (e) => {
+        const assistidoId = e.target.value;
+        if (assistidoId) {
+            const selectedAssistido = assistidos.find(a => a.id === parseInt(assistidoId));
+            if (selectedAssistido) {
+                setFormData({
+                    ...formData,
+                    assistidoId,
+                    nome: selectedAssistido.nomeProcesso || '',
+                    numero: selectedAssistido.numeroProcesso || '',
+                    status: selectedAssistido.status === 'Ativo' ? 'Em andamento' : selectedAssistido.status
+                });
+            }
+        } else {
+            // Reset form if no assistido selected
+            setFormData({
+                nome: '',
+                numero: '',
+                assistidoId: '',
+                status: 'Em andamento'
+            });
+        }
+    };
+
+    const handleSearchAssistido = (e) => {
+        const search = e.target.value;
+        setSearchAssistido(search);
+        setSelectedAssistido(null);
+
+        if (search.length >= 3) {
+            const found = assistidos.find(assistido => 
+                assistido.cpf.includes(search) || 
+                assistido.nome.toLowerCase().includes(search.toLowerCase())
+            );
+            
+            if (found) {
+                setSelectedAssistido(found);
+                setFormData({
+                    ...formData,
+                    assistidoId: found.id,
+                    nome: found.nomeProcesso || '',
+                    numero: found.numeroProcesso || '',
+                    status: found.status === 'Ativo' ? 'Em andamento' : found.status
+                });
+            }
+        }
+    };
+
+    const handleNewProcesso = () => {
+        navigate('/assistidos', { 
+            state: { 
+                fromProcessos: true,
+                message: 'Para cadastrar um novo processo, primeiro selecione ou cadastre um assistido.' 
+            } 
+        });
+    };
+
     return (
         <>
             <Header />
             <main className={styles.containerMain}>
                 <div className={styles.header}>
                     <h2>Gerenciamento de Processos</h2>
-                    <button className={styles.addButton} onClick={() => setShowForm(true)}>
+                    <button className={styles.addButton} onClick={handleNewProcesso}>
                         <FaPlus /> Novo Processo
                     </button>
                 </div>
@@ -133,12 +194,30 @@ const Processos = () => {
                             </button>
                             <h3>Cadastrar Novo Processo</h3>
                             <form onSubmit={handleSubmit}>
+                                <div className={styles.searchAssistido}>
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar assistido por CPF ou nome"
+                                        value={searchAssistido}
+                                        onChange={handleSearchAssistido}
+                                    />
+                                </div>
+                                
+                                {selectedAssistido && (
+                                    <div className={styles.assistidoInfo}>
+                                        <p>Assistido encontrado:</p>
+                                        <p><strong>Nome:</strong> {selectedAssistido.nome}</p>
+                                        <p><strong>CPF:</strong> {selectedAssistido.cpf}</p>
+                                    </div>
+                                )}
+
                                 <input
                                     type="text"
                                     placeholder="Nome do processo"
                                     value={formData.nome}
                                     onChange={(e) => setFormData({...formData, nome: e.target.value})}
                                     required
+                                    disabled={!selectedAssistido}
                                 />
                                 <input
                                     type="text"
@@ -146,28 +225,20 @@ const Processos = () => {
                                     value={formData.numero}
                                     onChange={(e) => setFormData({...formData, numero: e.target.value})}
                                     required
+                                    disabled={!selectedAssistido}
                                 />
-                                <select
-                                    value={formData.assistidoId}
-                                    onChange={(e) => setFormData({...formData, assistidoId: e.target.value})}
-                                    required
-                                >
-                                    <option value="">Selecione um assistido</option>
-                                    {assistidos.map(assistido => (
-                                        <option key={assistido.id} value={assistido.id}>
-                                            {assistido.nome}
-                                        </option>
-                                    ))}
-                                </select>
                                 <select
                                     value={formData.status}
                                     onChange={(e) => setFormData({...formData, status: e.target.value})}
+                                    disabled={!selectedAssistido}
                                 >
                                     <option value="Em andamento">Em andamento</option>
                                     <option value="Concluído">Concluído</option>
                                     <option value="Arquivado">Arquivado</option>
                                 </select>
-                                <button type="submit">Cadastrar</button>
+                                <button type="submit" disabled={!selectedAssistido}>
+                                    Cadastrar
+                                </button>
                             </form>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Header.module.scss';
 import logo from '../../assets/logo saju branca 2.svg';
@@ -10,28 +10,40 @@ const Header = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Add any logout logic here (clear localStorage, etc)
+        localStorage.clear(); // Clear all localStorage data
         navigate('/');
     };
   
+    const handleCloseMenu = () => {
+        setIsMenuOpen(false);
+    };
+
     return(
         <header className={styles.headerContainer}>
-            <Link to="/home"><img src={logo} alt='logo-white'/></Link>
+            <Link to="/home">
+                <img src={logo} alt='logo-white'/>
+            </Link>
             <nav className={`${styles.navLinks} ${isMenuOpen ? styles.open : ''}`}>
-                <Link to="/membros">Membros</Link>
-                <Link to="/plantao">Plantão</Link>
-                <Link to="/comissao">Comissão</Link>
-                <Link to="/processos">Processos</Link>
-                <Link to="/ficha-presenca">Ficha de Presença</Link>
-                <Link to="/triunvirato">Triunvirato</Link>
-                <Link to="/assistidos">Assistido</Link>
-                <Link to="/najup">NAJUP</Link>
-                <Link to="/relatorios">Relatórios</Link>
+                <Link onClick={handleCloseMenu} to="/membros">Membros</Link>
+                <Link onClick={handleCloseMenu} to="/plantao">Plantão</Link>
+                <Link onClick={handleCloseMenu} to="/comissao">Comissão</Link>
+                <Link onClick={handleCloseMenu} to="/processos">Processos</Link>
+                <Link onClick={handleCloseMenu} to="/ficha-presenca">Ficha de Presença</Link>
+                <Link onClick={handleCloseMenu} to="/triunvirato">Triunvirato</Link>
+                <Link onClick={handleCloseMenu} to="/assistidos">Assistidos</Link>
+                <Link onClick={handleCloseMenu} to="/najup">NAJUP</Link>
+                <Link onClick={handleCloseMenu} to="/relatorios">Relatórios</Link>
                 <button onClick={handleLogout} className={styles.logoutButton}>Sair</button>
             </nav>
-            <TfiMenu onClick={() => setIsMenuOpen(!isMenuOpen)}/>
+            <button 
+                className={styles.menuButton} 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Menu"
+            >
+                <TfiMenu />
+            </button>
         </header>
-    )
-}
+    );
+};
 
 export default Header;
