@@ -1,12 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from './Processo.module.scss';
-import { FaSearch, FaEdit, FaTrash, FaEye, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaSearch, FaEdit, FaTrash, FaEye, FaPlus, FaTimes, FaPaperclip } from 'react-icons/fa';
+
+const formatTimeAgo = (date) => {
+    const now = new Date();
+    const uploadDate = new Date(date);
+    const diffInMinutes = Math.floor((now - uploadDate) / (1000 * 60));
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInMinutes < 60) {
+        return `há ${diffInMinutes} minutos`;
+    } else if (diffInHours < 24) {
+        return `há ${diffInHours} horas`;
+    } else {
+        return `há ${diffInDays} dias`;
+    }
+};
 
 const Processos = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [processos, setProcessos] = useState([]);
     const [assistidos, setAssistidos] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -19,13 +36,25 @@ const Processos = () => {
         assistidoId: '',
         status: 'Em andamento'
     });
+    const [showEditForm, setShowEditForm] = useState(false);
+    const [editingProcesso, setEditingProcesso] = useState(null);
 
     useEffect(() => {
         const storedProcessos = JSON.parse(localStorage.getItem('processos')) || [];
         const storedAssistidos = JSON.parse(localStorage.getItem('assistidos')) || [];
         setProcessos(storedProcessos);
         setAssistidos(storedAssistidos);
-    }, []);
+
+        // Check if we have a selected processo from navigation
+        if (location.state?.selectedProcesso && location.state?.openDetails) {
+            setEditingProcesso({
+                ...location.state.selectedProcesso,
+                descricao: location.state.selectedProcesso.descricao || '',
+                documentos: location.state.selectedProcesso.documentos || []
+            });
+            setShowEditForm(true);
+        }
+    }, [location]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -129,6 +158,49 @@ const Processos = () => {
         });
     };
 
+    const handleEdit = (processo) => {
+        setEditingProcesso({
+            ...processo,
+            descricao: processo.descricao || '',
+            documentos: processo.documentos || []
+        });
+        setShowEditForm(true);
+    };
+
+    const handleEditSubmit = (e) => {
+        e.preventDefault();
+        const updatedProcessos = processos.map(p => 
+            p.id === editingProcesso.id ? editingProcesso : p
+        );
+        localStorage.setItem('processos', JSON.stringify(updatedProcessos));
+        setProcessos(updatedProcessos);
+        setShowEditForm(false);
+        setEditingProcesso(null);
+    };
+
+    const handleFileUpload = (e) => {
+        const files = Array.from(e.target.files);
+        const newDocs = files.map(file => ({
+            id: Date.now() + Math.random(),
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            uploadDate: new Date().toISOString()
+        }));
+
+        setEditingProcesso(prev => ({
+            ...prev,
+            documentos: [...(prev.documentos || []), ...newDocs]
+        }));
+    };
+
+    const handleRemoveDocument = (docId) => {
+        setEditingProcesso(prev => ({
+            ...prev,
+            documentos: prev.documentos.filter(doc => doc.id !== docId)
+        }));
+    };
+
     return (
         <>
             <Header />
@@ -177,7 +249,7 @@ const Processos = () => {
                                     <td>{processo.status}</td>
                                     <td className={styles.actions}>
                                         <button title="Ver detalhes"><FaEye /></button>
-                                        <button title="Editar"><FaEdit /></button>
+                                        <button title="Editar" onClick={() => handleEdit(processo)}><FaEdit /></button>
                                         <button title="Excluir" onClick={() => handleDelete(processo.id)}><FaTrash /></button>
                                     </td>
                                 </tr>
@@ -239,6 +311,95 @@ const Processos = () => {
                                 <button type="submit" disabled={!selectedAssistido}>
                                     Cadastrar
                                 </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {showEditForm && (
+                    <div className={styles.formOverlay}>
+                        <div className={styles.formContainer}>
+                            <div className={styles.editHeader}>
+                                <div className={styles.processInfo}>
+                                    <h3>Editar Processo</h3>
+                                    <span>Assistido: {editingProcesso.assistido}</span>
+                                </div>
+                                <button className={styles.closeButton} onClick={() => setShowEditForm(false)}>
+                                    <FaTimes />
+                                </button>
+                            </div>
+                            <form onSubmit={handleEditSubmit}>
+                                <div className={styles.twoColumns}>
+                                    <input
+                                        type="text"
+                                        placeholder="Nome do processo"
+                                        value={editingProcesso.nome}
+                                        onChange={(e) => setEditingProcesso({
+                                            ...editingProcesso,
+                                            nome: e.target.value
+                                        })}
+                                        required
+                                    />
+                                    <select
+                                        value={editingProcesso.status}
+                                        onChange={(e) => setEditingProcesso({
+                                            ...editingProcesso,
+                                            status: e.target.value
+                                        })}
+                                    >
+                                        <option value="Em andamento">Em andamento</option>
+                                        <option value="Concluído">Concluído</option>
+                                        <option value="Arquivado">Arquivado</option>
+                                    </select>
+                                </div>
+
+                                <textarea
+                                    placeholder="Descrição detalhada do processo"
+                                    value={editingProcesso.descricao}
+                                    onChange={(e) => setEditingProcesso({
+                                        ...editingProcesso,
+                                        descricao: e.target.value
+                                    })}
+                                    rows={6}
+                                />
+
+                                <div className={styles.documentSection}>
+                                    <h4><FaPaperclip /> Documentos do Processo</h4>
+                                    <div className={styles.fileUpload}>
+                                        <label htmlFor="file-upload">
+                                            <FaPlus /> Arraste arquivos ou clique para anexar
+                                        </label>
+                                        <input
+                                            id="file-upload"
+                                            type="file"
+                                            multiple
+                                            onChange={handleFileUpload}
+                                        />
+                                    </div>
+
+                                    {editingProcesso.documentos?.length > 0 && (
+                                        <div className={styles.documentList}>
+                                            {editingProcesso.documentos.map(doc => (
+                                                <div key={doc.id} className={styles.documentItem}>
+                                                    <div className={styles.docInfo}>
+                                                        <span className={styles.docName}>{doc.name}</span>
+                                                        <span className={styles.docMeta}>
+                                                            {formatTimeAgo(doc.uploadDate)}
+                                                        </span>
+                                                    </div>
+                                                    <button 
+                                                        type="button"
+                                                        onClick={() => handleRemoveDocument(doc.id)}
+                                                    >
+                                                        <FaTimes />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <button type="submit">Salvar Alterações</button>
                             </form>
                         </div>
                     </div>

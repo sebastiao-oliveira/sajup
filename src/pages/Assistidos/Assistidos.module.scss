@@ -180,6 +180,15 @@
     }
 }
 
+.clickableCell {
+    cursor: pointer;
+    color: #800100;
+    
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 @media (max-width: 768px) {
     .header {
         flex-direction: column;

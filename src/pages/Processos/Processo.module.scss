@@ -88,9 +88,11 @@
 }
 
 .formContainer {
-    width: 90%;
-    max-width: 500px;
+    width: 95%;
+    max-width: 800px;
     margin: 0 15px;
+    max-height: 90vh;
+    overflow-y: auto;
 
     .searchAssistido {
         margin-bottom: 1rem;
@@ -133,6 +135,171 @@
             background-color: #cccccc;
         }
     }
+
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .documentSection {
+        margin-top: 1rem;
+        padding: 1rem;
+        background-color: #f8f8f8;
+        border-radius: 4px;
+
+        h4 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .fileUpload {
+            label {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                background-color: #800100;
+                color: white;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 0.9rem;
+
+                &:hover {
+                    background-color: #660100;
+                }
+            }
+
+            input[type="file"] {
+                display: none;
+            }
+        }
+
+        .documentList {
+            margin-top: 1rem;
+
+            .documentItem {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem;
+                background-color: white;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                margin-bottom: 0.5rem;
+
+                button {
+                    background: none;
+                    border: none;
+                    color: #666;
+                    cursor: pointer;
+                    padding: 0.25rem;
+
+                    &:hover {
+                        color: #800100;
+                    }
+                }
+            }
+        }
+    }
+
+    .editHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #eee;
+
+        .processInfo {
+            span {
+                display: block;
+                color: #666;
+                margin-top: 0.5rem;
+            }
+        }
+    }
+
+    .twoColumns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .documentSection {
+        background: #f8f8f8;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+
+        h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+
+            svg {
+                color: #800100;
+            }
+        }
+
+        .fileUpload {
+            label {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                width: 100%;
+                padding: 1rem;
+                background-color: white;
+                border: 2px dashed #800100;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: #fff3f3;
+                }
+            }
+        }
+
+        .documentList {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+
+            .documentItem {
+                background: white;
+                padding: 0.75rem;
+                border-radius: 6px;
+                border: 1px solid #ddd;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .docInfo {
+                    display: flex;
+                    flex-direction: column;
+                    
+                    .docName {
+                        font-weight: 500;
+                        margin-bottom: 0.25rem;
+                    }
+                    
+                    .docMeta {
+                        font-size: 0.75rem;
+                        color: #666;
+                    }
+                }
+            }
+        }
+    }
 }
 
 @media (max-width: 768px) {
@@ -160,6 +327,14 @@
             input, select, button {
                 width: 100%;
             }
+        }
+
+        .twoColumns {
+            grid-template-columns: 1fr;
+        }
+
+        .documentList {
+            grid-template-columns: 1fr;
         }
     }
 }

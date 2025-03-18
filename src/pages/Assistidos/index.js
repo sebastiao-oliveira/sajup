@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from './Assistidos.module.scss';
@@ -7,6 +7,7 @@ import { FaSearch, FaEdit, FaTrash, FaEye, FaUserPlus, FaTimes } from 'react-ico
 
 const Assistidos = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [assistidos, setAssistidos] = useState([]);
     const [showForm, setShowForm] = useState(false);
@@ -78,6 +79,22 @@ const Assistidos = () => {
         const storedProcessos = JSON.parse(localStorage.getItem('processos')) || [];
         const filteredProcessos = storedProcessos.filter(processo => processo.assistidoId !== id);
         localStorage.setItem('processos', JSON.stringify(filteredProcessos));
+    };
+
+    const handleProcessoClick = (assistido) => {
+        if (assistido.numeroProcesso) {
+            const storedProcessos = JSON.parse(localStorage.getItem('processos')) || [];
+            const processo = storedProcessos.find(p => p.numero === assistido.numeroProcesso);
+            
+            if (processo) {
+                navigate('/processos', {
+                    state: { 
+                        selectedProcesso: processo,
+                        openDetails: true
+                    }
+                });
+            }
+        }
     };
 
     return (
@@ -179,8 +196,18 @@ const Assistidos = () => {
                                 <tr key={assistido.id}>
                                     <td>{assistido.nome}</td>
                                     <td>{assistido.cpf}</td>
-                                    <td>{assistido.nomeProcesso}</td>
-                                    <td>{assistido.numeroProcesso}</td>
+                                    <td 
+                                        className={assistido.nomeProcesso ? styles.clickableCell : ''}
+                                        onClick={() => handleProcessoClick(assistido)}
+                                    >
+                                        {assistido.nomeProcesso}
+                                    </td>
+                                    <td 
+                                        className={assistido.numeroProcesso ? styles.clickableCell : ''}
+                                        onClick={() => handleProcessoClick(assistido)}
+                                    >
+                                        {assistido.numeroProcesso}
+                                    </td>
                                     <td>{assistido.dataEntrada}</td>
                                     <td>{assistido.status}</td>
                                     <td className={styles.actions}>
