@@ -1,14 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import RoutesApp from './routes';
+import App from './App';
 import './index.scss';
+import "primereact/resources/themes/lara-light-indigo/theme.css";  // theme
+import "primereact/resources/primereact.min.css";                  // core css
+import "primeicons/primeicons.css";                 // icons
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <RoutesApp />
+      <App />
     </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );

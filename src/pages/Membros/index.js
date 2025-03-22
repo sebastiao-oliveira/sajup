@@ -79,7 +79,7 @@ const Membros = () => {
                                     <td className={styles.rightDutyTime}>{membro.entryDuty} - {membro.exitDuty}</td>
                             <td className={styles.right}>
                                         <button className={styles.btnTable}>
-                                            <Link to={`/Membros/VerMais/${membro.id}`}>Ver mais</Link>
+                                            <Link to={`/membros/vermais/${String(membro.cpf)}`}>Ver mais</Link>
                                         </button>
                                         <button 
                                             className={styles.btnTable} 

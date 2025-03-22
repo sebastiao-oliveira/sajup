@@ -4,6 +4,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from './Assistidos.module.scss';
 import { FaSearch, FaEdit, FaTrash, FaEye, FaUserPlus, FaTimes } from 'react-icons/fa';
+import StorageService from '../../services/storage';
 
 const Assistidos = () => {
     const location = useLocation();
@@ -21,7 +22,7 @@ const Assistidos = () => {
     const [notification, setNotification] = useState('');
 
     useEffect(() => {
-        const storedAssistidos = JSON.parse(localStorage.getItem('assistidos')) || [];
+        const storedAssistidos = StorageService.get('assistidos');
         setAssistidos(storedAssistidos);
     }, []);
 
@@ -41,12 +42,11 @@ const Assistidos = () => {
         };
 
         const updatedAssistidos = [...assistidos, newAssistido];
-        localStorage.setItem('assistidos', JSON.stringify(updatedAssistidos));
+        StorageService.set('assistidos', updatedAssistidos);
         setAssistidos(updatedAssistidos);
 
-        // If there's a processo info, create it
         if (formData.nomeProcesso && formData.numeroProcesso) {
-            const storedProcessos = JSON.parse(localStorage.getItem('processos')) || [];
+            const processos = StorageService.get('processos');
             const newProcesso = {
                 id: Date.now() + 1,
                 nome: formData.nomeProcesso,
@@ -55,8 +55,7 @@ const Assistidos = () => {
                 assistido: newAssistido.nome,
                 status: 'Em andamento'
             };
-            const updatedProcessos = [...storedProcessos, newProcesso];
-            localStorage.setItem('processos', JSON.stringify(updatedProcessos));
+            StorageService.set('processos', [...processos, newProcesso]);
         }
 
         setShowForm(false);
@@ -95,6 +94,27 @@ const Assistidos = () => {
                 });
             }
         }
+    };
+
+    const handleStatusChange = (assistidoId, newStatus) => {
+        // Update assistido status
+        const updatedAssistidos = assistidos.map(assistido => {
+            if (assistido.id === assistidoId) {
+                return { ...assistido, status: newStatus };
+            }
+            return assistido;
+        });
+        setAssistidos(updatedAssistidos);
+
+        // Update related processo status
+        const storedProcessos = JSON.parse(localStorage.getItem('processos')) || [];
+        const updatedProcessos = storedProcessos.map(processo => {
+            if (processo.assistidoId === assistidoId) {
+                return { ...processo, status: newStatus === 'Ativo' ? 'Em andamento' : newStatus };
+            }
+            return processo;
+        });
+        localStorage.setItem('processos', JSON.stringify(updatedProcessos));
     };
 
     return (
@@ -209,7 +229,16 @@ const Assistidos = () => {
                                         {assistido.numeroProcesso}
                                     </td>
                                     <td>{assistido.dataEntrada}</td>
-                                    <td>{assistido.status}</td>
+                                    <td>
+                                        <select 
+                                            value={assistido.status}
+                                            onChange={(e) => handleStatusChange(assistido.id, e.target.value)}
+                                        >
+                                            <option value="Ativo">Ativo</option>
+                                            <option value="Em andamento">Em andamento</option>
+                                            <option value="Concluído">Concluído</option>
+                                        </select>
+                                    </td>
                                     <td className={styles.actions}>
                                         <button title="Ver detalhes"><FaEye /></button>
                                         <button title="Editar"><FaEdit /></button>

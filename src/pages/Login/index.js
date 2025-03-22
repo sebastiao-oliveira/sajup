@@ -6,6 +6,7 @@ import logoVermelho from '../../assets/logo saju vermelha 1.png'
 import logoBranco from '../../assets/logo saju branca 2.svg'
 import { Link, useNavigate } from 'react-router-dom'
 import escritorioImg from '../../assets/escritorio.jpeg'
+import AuthService from '../../services/auth';
 
 const Login = () => {
     const [infoLogin, setInfoLogin] = useState(true)
@@ -22,10 +23,14 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Add your authentication logic here
         
-        // For now, just redirect to home
-        // Replace this with actual authentication later
+        // Simular autenticação - substitua por sua lógica real de autenticação
+        const userData = {
+            email,
+            nome: 'Usuário Teste' // Adicione outros dados do usuário conforme necessário
+        };
+        
+        AuthService.login(userData);
         navigate('/home');
     };
 

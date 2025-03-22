@@ -26,7 +26,7 @@ const RoutesApp = () => {
             <Route path="/plantao/:params" element={<Ts />} />
             <Route path="/membros" element={<Membros />} />
             <Route path="/membros/novo" element={<RegisterMember />} />
-            <Route path="/membros/ver-mais/:id" element={<SeeMoreMember />} />
+            <Route path="/membros/vermais/:id" element={<SeeMoreMember />} />
             <Route path="/membros/editar/:id" element={<EditMember />} />
             <Route path="/comissao" element={<Comissao />} />
             <Route path="/najup" element={<NAJUP />} />

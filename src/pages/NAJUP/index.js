@@ -27,9 +27,18 @@ const NAJUP = () => {
             <main className={styles.containerMain}>
                 <aside className={styles.menuLateral}>
                     <ul>
-                        <li onClick={() => setSelectedCategory('Processos')}>Processos</li>
-                        <li onClick={() => setSelectedCategory('Membros')}>Membros</li>
-                        <li onClick={() => setSelectedCategory('Registros')}>Registros</li>
+                        {['Processos', 'Membros', 'Registros'].map((category) => (
+                            <li
+                                key={category}
+                                className={selectedCategory === category ? styles.active : ''}
+                                onClick={() => setSelectedCategory(category)}
+                                role="button"
+                                tabIndex={0}
+                                onKeyPress={(e) => e.key === 'Enter' && setSelectedCategory(category)}
+                            >
+                                {category}
+                            </li>
+                        ))}
                     </ul>
                 </aside>
                 <section className={styles.contentArea}>

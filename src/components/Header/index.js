@@ -4,13 +4,14 @@ import styles from './Header.module.scss';
 import logo from '../../assets/logo saju branca 2.svg';
 import { Link } from 'react-router-dom';
 import { TfiMenu } from 'react-icons/tfi';
+import AuthService from '../../services/auth';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.clear(); // Clear all localStorage data
+        AuthService.logout(); // Agora usa o AuthService
         navigate('/');
     };
   

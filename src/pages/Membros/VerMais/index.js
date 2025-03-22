@@ -1,7 +1,7 @@
-import Header from "../../../components/Header"
-import Footer from "../../../components/Footer"
-import styles from './SeeMore.module.scss'
-import { Link, useParams } from "react-router-dom"
+import Header from "../../../components/Header";
+import Footer from "../../../components/Footer";
+import styles from './SeeMore.module.scss';
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 
 const SeeMoreMember = () => {
@@ -11,13 +11,25 @@ const SeeMoreMember = () => {
     useEffect(() => {
         const loadMemberData = () => {
             try {
-                const members = JSON.parse(localStorage.getItem('members')) || [];
-                const foundMember = members.find(m => m.id === id);
+                const storedMembers = localStorage.getItem('members');
+                if (!storedMembers) {
+                    console.error("No members found in localStorage.");
+                    return;
+                }
+
+                const members = JSON.parse(storedMembers);
+                if (!Array.isArray(members)) {
+                    console.error("Invalid members data in localStorage.");
+                    return;
+                }
+
+                // Convert both IDs to strings for consistent comparison
+                const foundMember = members.find(m => String(m.cpf) === String(id));
                 if (foundMember) {
                     setMember(foundMember);
-                    console.log("Member found:", foundMember); // Debug log
+                    console.log("Member found:", foundMember);
                 } else {
-                    console.log("Member not found for ID:", id); // Debug log
+                    console.warn("Member not found for ID:", id);
                 }
             } catch (error) {
                 console.error("Error loading member data:", error);
@@ -40,9 +52,9 @@ const SeeMoreMember = () => {
         );
     }
 
-    return(
+    return (
         <>
-            <Header/>
+            <Header />
             <main className={styles.containerMain}>
                 <h3>{member.name}</h3>
                 <article className={styles.containerForms}>
@@ -174,9 +186,9 @@ const SeeMoreMember = () => {
                     </section>
                 </article>
             </main>
-            <Footer/>
+            <Footer />
         </>
-    )
-}
+    );
+};
 
-export default SeeMoreMember
+export default SeeMoreMember;

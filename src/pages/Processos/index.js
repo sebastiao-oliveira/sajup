@@ -1,86 +1,145 @@
-import React, { useState, useEffect } from 'react';
+// Importação de bibliotecas e componentes necessários
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from './Processo.module.scss';
-import { FaSearch, FaEdit, FaTrash, FaEye, FaPlus, FaTimes, FaPaperclip } from 'react-icons/fa';
+import { FaSearch, FaEdit, FaTrash, FaEye, FaPlus, FaTimes, FaPaperclip, FaDownload } from 'react-icons/fa';
+import StorageService from '../../services/storage';
 
-const formatTimeAgo = (date) => {
-    const now = new Date();
-    const uploadDate = new Date(date);
-    const diffInMinutes = Math.floor((now - uploadDate) / (1000 * 60));
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    const diffInDays = Math.floor(diffInHours / 24);
-
-    if (diffInMinutes < 60) {
-        return `há ${diffInMinutes} minutos`;
-    } else if (diffInHours < 24) {
-        return `há ${diffInHours} horas`;
-    } else {
-        return `há ${diffInDays} dias`;
-    }
+// Estado inicial do formulário de processo
+const initialFormState = {
+    nome: '',
+    numero: '',
+    assistidoId: '',
+    status: 'Em andamento'
 };
 
+// Função para formatar o tempo decorrido em formato legível
+const formatTimeAgo = date => {
+    const periods = {
+        minuto: 60,
+        hora: 3600,
+        dia: 86400
+    };
+    
+    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    
+    for (const [unit, seconds_in_unit] of Object.entries(periods)) {
+        const interval = Math.floor(seconds / seconds_in_unit);
+        if (interval >= 1) {
+            return `há ${interval} ${unit}${interval !== 1 ? 's' : ''}`;
+        }
+    }
+    return 'agora mesmo';
+};
+
+// Add this new component above the Processos component
+const DocumentLinks = ({ documents }) => {
+    return (
+        <div className={styles.documentLinks}>
+            <span className={styles.documentCount}>
+                {documents?.length > 0 ? `${documents.length} documento(s)` : 'Sem documentos'}
+            </span>
+            {documents?.length > 0 && (
+                <div className={styles.linksList}>
+                    {documents.map(doc => (
+                        <a 
+                            key={doc.id}
+                            href={doc.filePath}
+                            download={doc.fileName}
+                            className={styles.docLink}
+                        >
+                            {doc.name}
+                        </a>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+// Componente principal de gerenciamento de processos
 const Processos = () => {
+    // Hooks de navegação e localização
     const navigate = useNavigate();
     const location = useLocation();
-    const [processos, setProcessos] = useState([]);
-    const [assistidos, setAssistidos] = useState([]);
+    // Estados para gerenciar processos e assistidos
+    const [processos, setProcessos] = useState(() => StorageService.get('processos'));
+    const [assistidos, setAssistidos] = useState(() => StorageService.get('assistidos'));
     const [searchTerm, setSearchTerm] = useState('');
-    const [showForm, setShowForm] = useState(false);
-    const [searchAssistido, setSearchAssistido] = useState('');
-    const [selectedAssistido, setSelectedAssistido] = useState(null);
-    const [formData, setFormData] = useState({
-        nome: '',
-        numero: '',
-        assistidoId: '',
-        status: 'Em andamento'
+    const [formState, setFormState] = useState({
+        showForm: false,
+        showEditForm: false,
+        searchAssistido: '',
+        selectedAssistido: null,
+        formData: initialFormState,
+        editingProcesso: null
     });
-    const [showEditForm, setShowEditForm] = useState(false);
-    const [editingProcesso, setEditingProcesso] = useState(null);
 
+    // Atualizar onde houver setProcessos
+    const updateProcessos = (newProcessos) => {
+        StorageService.set('processos', newProcessos);
+        setProcessos(newProcessos);
+    };
+
+    // Atualizar onde houver setAssistidos
+    const updateAssistidos = (newAssistidos) => {
+        StorageService.set('assistidos', newAssistidos);
+        setAssistidos(newAssistidos);
+    };
+
+    // Memoriza a lista de processos filtrados para melhor performance
+    const filteredProcessos = useMemo(() => {
+        const searchLower = searchTerm.toLowerCase();
+        return processos.filter(processo =>
+            processo.nome.toLowerCase().includes(searchLower) ||
+            processo.numero.includes(searchTerm)
+        );
+    }, [processos, searchTerm]);
+
+    // Função otimizada para atualizar o estado do formulário
+    const updateFormState = useCallback((updates) => {
+        setFormState(prev => ({ ...prev, ...updates }));
+    }, []);
+
+    // Efeito para verificar se há um processo selecionado na navegação
     useEffect(() => {
-        const storedProcessos = JSON.parse(localStorage.getItem('processos')) || [];
-        const storedAssistidos = JSON.parse(localStorage.getItem('assistidos')) || [];
-        setProcessos(storedProcessos);
-        setAssistidos(storedAssistidos);
-
         // Check if we have a selected processo from navigation
         if (location.state?.selectedProcesso && location.state?.openDetails) {
-            setEditingProcesso({
-                ...location.state.selectedProcesso,
-                descricao: location.state.selectedProcesso.descricao || '',
-                documentos: location.state.selectedProcesso.documentos || []
+            updateFormState({
+                editingProcesso: {
+                    ...location.state.selectedProcesso,
+                    descricao: location.state.selectedProcesso.descricao || '',
+                    documentos: location.state.selectedProcesso.documentos || []
+                },
+                showEditForm: true
             });
-            setShowEditForm(true);
         }
-    }, [location]);
+    }, [location, updateFormState]);
 
+    // Manipulador de submissão do formulário de novo processo
     const handleSubmit = (e) => {
         e.preventDefault();
         const newProcesso = {
             id: Date.now(),
-            ...formData,
-            assistido: assistidos.find(a => a.id === parseInt(formData.assistidoId))?.nome || ''
+            ...formState.formData,
+            assistido: assistidos.find(a => a.id === parseInt(formState.formData.assistidoId))?.nome || ''
         };
 
         const updatedProcessos = [...processos, newProcesso];
-        localStorage.setItem('processos', JSON.stringify(updatedProcessos));
-        setProcessos(updatedProcessos);
-        setShowForm(false);
-        setFormData({
-            nome: '',
-            numero: '',
-            assistidoId: '',
-            status: 'Em andamento'
+        updateProcessos(updatedProcessos);
+        updateFormState({
+            showForm: false,
+            formData: initialFormState
         });
     };
 
+    // Manipulador para exclusão de processo
     const handleDelete = (id) => {
         if (window.confirm('Tem certeza que deseja excluir este processo?')) {
             const filtered = processos.filter(processo => processo.id !== id);
-            localStorage.setItem('processos', JSON.stringify(filtered));
-            setProcessos(filtered);
+            updateProcessos(filtered);
 
             // Update related assistido
             const assistido = assistidos.find(a => 
@@ -95,60 +154,65 @@ const Processos = () => {
                 const updatedAssistidos = assistidos.map(a => 
                     a.id === assistido.id ? updatedAssistido : a
                 );
-                localStorage.setItem('assistidos', JSON.stringify(updatedAssistidos));
-                setAssistidos(updatedAssistidos);
+                updateAssistidos(updatedAssistidos);
             }
         }
     };
 
+    // Manipulador de seleção de assistido
     const handleAssistidoSelect = (e) => {
         const assistidoId = e.target.value;
         if (assistidoId) {
             const selectedAssistido = assistidos.find(a => a.id === parseInt(assistidoId));
             if (selectedAssistido) {
-                setFormData({
-                    ...formData,
-                    assistidoId,
-                    nome: selectedAssistido.nomeProcesso || '',
-                    numero: selectedAssistido.numeroProcesso || '',
-                    status: selectedAssistido.status === 'Ativo' ? 'Em andamento' : selectedAssistido.status
+                updateFormState({
+                    formData: {
+                        ...formState.formData,
+                        assistidoId,
+                        nome: selectedAssistido.nomeProcesso || '',
+                        numero: selectedAssistido.numeroProcesso || '',
+                        status: selectedAssistido.status === 'Ativo' ? 'Em andamento' : selectedAssistido.status
+                    }
                 });
             }
         } else {
             // Reset form if no assistido selected
-            setFormData({
-                nome: '',
-                numero: '',
-                assistidoId: '',
-                status: 'Em andamento'
+            updateFormState({
+                formData: initialFormState
             });
         }
     };
 
-    const handleSearchAssistido = (e) => {
+    // Manipulador de busca de assistido
+    const handleSearchAssistido = useCallback((e) => {
         const search = e.target.value;
-        setSearchAssistido(search);
-        setSelectedAssistido(null);
-
         if (search.length >= 3) {
             const found = assistidos.find(assistido => 
                 assistido.cpf.includes(search) || 
                 assistido.nome.toLowerCase().includes(search.toLowerCase())
             );
             
-            if (found) {
-                setSelectedAssistido(found);
-                setFormData({
-                    ...formData,
+            updateFormState({
+                searchAssistido: search,
+                selectedAssistido: found,
+                formData: found ? {
+                    ...initialFormState,
                     assistidoId: found.id,
                     nome: found.nomeProcesso || '',
                     numero: found.numeroProcesso || '',
                     status: found.status === 'Ativo' ? 'Em andamento' : found.status
-                });
-            }
+                } : initialFormState
+            });
+        } else {
+            updateFormState({
+                searchAssistido: search,
+                selectedAssistido: null,
+                formData: initialFormState
+            });
         }
-    };
+    }, [assistidos, updateFormState]);
 
+    // Manipulador para criar novo processo
     const handleNewProcesso = () => {
         navigate('/assistidos', { 
             state: { 
@@ -158,53 +222,104 @@ const Processos = () => {
         });
     };
 
+    // Manipulador para edição de processo
     const handleEdit = (processo) => {
-        setEditingProcesso({
-            ...processo,
-            descricao: processo.descricao || '',
-            documentos: processo.documentos || []
+        updateFormState({
+            editingProcesso: {
+                ...processo,
+                descricao: processo.descricao || '',
+                documentos: processo.documentos || []
+            },
+            showEditForm: true
         });
-        setShowEditForm(true);
     };
 
+    const handleStatusChange = (processo, newStatus) => {
+        const updatedProcessos = processos.map(p => 
+            p.id === processo.id ? { ...p, status: newStatus } : p
+        );
+        updateProcessos(updatedProcessos);
+
+        const updatedAssistidos = assistidos.map(assistido => {
+            if (assistido.id === parseInt(processo.assistidoId)) {
+                return { 
+                    ...assistido, 
+                    status: newStatus === 'Em andamento' ? 'Ativo' : newStatus 
+                };
+            }
+            return assistido;
+        });
+        updateAssistidos(updatedAssistidos);
+    };
+
+    // Manipulador de submissão do formulário de edição
     const handleEditSubmit = (e) => {
         e.preventDefault();
         const updatedProcessos = processos.map(p => 
-            p.id === editingProcesso.id ? editingProcesso : p
+            p.id === formState.editingProcesso.id 
+                ? { ...p, ...formState.editingProcesso }
+                : p
         );
-        localStorage.setItem('processos', JSON.stringify(updatedProcessos));
-        setProcessos(updatedProcessos);
-        setShowEditForm(false);
-        setEditingProcesso(null);
+        updateProcessos(updatedProcessos);
+        handleStatusChange(formState.editingProcesso, formState.editingProcesso.status);
+        updateFormState({
+            showEditForm: false,
+            editingProcesso: null
+        });
     };
 
-    const handleFileUpload = (e) => {
-        const files = Array.from(e.target.files);
-        const newDocs = files.map(file => ({
-            id: Date.now() + Math.random(),
-            name: file.name,
-            type: file.type,
-            size: file.size,
-            uploadDate: new Date().toISOString()
-        }));
+    // Modificar o handleFileUpload para handleAddDocument
+    const handleAddDocument = (e) => {
+        e.preventDefault();
+        const documentName = e.target.documentName.value;
+        const fileInput = e.target.documentFile;
+        
+        if (documentName && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const newDoc = {
+                id: Date.now() + Math.random(),
+                name: documentName,
+                fileName: file.name,
+                filePath: URL.createObjectURL(file),
+                localPath: file.webkitRelativePath || file.name,
+                uploadDate: new Date().toISOString(),
+                size: file.size
+            };
 
-        setEditingProcesso(prev => ({
-            ...prev,
-            documentos: [...(prev.documentos || []), ...newDocs]
-        }));
+            updateFormState({
+                editingProcesso: {
+                    ...formState.editingProcesso,
+                    documentos: [...(formState.editingProcesso?.documentos || []), newDoc]
+                }
+            });
+
+            // Reset form
+            e.target.reset();
+        }
     };
 
+    // Manipulador para remover documentos
     const handleRemoveDocument = (docId) => {
-        setEditingProcesso(prev => ({
-            ...prev,
-            documentos: prev.documentos.filter(doc => doc.id !== docId)
-        }));
+        updateFormState({
+            editingProcesso: {
+                ...formState.editingProcesso,
+                documentos: formState.editingProcesso.documentos.filter(doc => doc.id !== docId)
+            }
+        });
     };
 
+    // Add handleDownloadDocument
+    const handleDownloadDocument = (doc) => {
+        StorageService.downloadDocument(doc.fileData, doc.fileName);
+    };
+
+    // Renderização do componente
     return (
         <>
+            {/* Componente de cabeçalho */}
             <Header />
             <main className={styles.containerMain}>
+                {/* Cabeçalho da página */}
                 <div className={styles.header}>
                     <h2>Gerenciamento de Processos</h2>
                     <button className={styles.addButton} onClick={handleNewProcesso}>
@@ -212,6 +327,7 @@ const Processos = () => {
                     </button>
                 </div>
 
+                {/* Barra de pesquisa */}
                 <div className={styles.searchContainer}>
                     <div className={styles.searchBox}>
                         <FaSearch />
@@ -224,6 +340,7 @@ const Processos = () => {
                     </div>
                 </div>
 
+                {/* Tabela de processos */}
                 <div className={styles.tableContainer}>
                     <table>
                         <thead>
@@ -232,21 +349,27 @@ const Processos = () => {
                                 <th>Número</th>
                                 <th>Assistido</th>
                                 <th>Status</th>
+                                <th>Documentos</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {processos
-                                .filter(processo =>
-                                    processo.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                    processo.numero.includes(searchTerm)
-                                )
-                                .map(processo => (
+                            {filteredProcessos.map(processo => (
                                 <tr key={processo.id}>
                                     <td>{processo.nome}</td>
                                     <td>{processo.numero}</td>
                                     <td>{processo.assistido}</td>
-                                    <td>{processo.status}</td>
+                                    <td>
+                                        <select 
+                                            value={processo.status}
+                                            onChange={(e) => handleStatusChange(processo, e.target.value)}
+                                        >
+                                            <option value="Em andamento">Em andamento</option>
+                                            <option value="Concluído">Concluído</option>
+                                            <option value="Arquivado">Arquivado</option>
+                                        </select>
+                                    </td>
+                                    <td><DocumentLinks documents={processo.documentos} /></td>
                                     <td className={styles.actions}>
                                         <button title="Ver detalhes"><FaEye /></button>
                                         <button title="Editar" onClick={() => handleEdit(processo)}><FaEdit /></button>
@@ -258,10 +381,11 @@ const Processos = () => {
                     </table>
                 </div>
 
-                {showForm && (
+                {/* Formulário de cadastro de novo processo */}
+                {formState.showForm && (
                     <div className={styles.formOverlay}>
                         <div className={styles.formContainer}>
-                            <button className={styles.closeButton} onClick={() => setShowForm(false)}>
+                            <button className={styles.closeButton} onClick={() => updateFormState({ showForm: false })}>
                                 <FaTimes />
                             </button>
                             <h3>Cadastrar Novo Processo</h3>
@@ -270,45 +394,45 @@ const Processos = () => {
                                     <input
                                         type="text"
                                         placeholder="Buscar assistido por CPF ou nome"
-                                        value={searchAssistido}
+                                        value={formState.searchAssistido}
                                         onChange={handleSearchAssistido}
                                     />
                                 </div>
                                 
-                                {selectedAssistido && (
+                                {formState.selectedAssistido && (
                                     <div className={styles.assistidoInfo}>
                                         <p>Assistido encontrado:</p>
-                                        <p><strong>Nome:</strong> {selectedAssistido.nome}</p>
-                                        <p><strong>CPF:</strong> {selectedAssistido.cpf}</p>
+                                        <p><strong>Nome:</strong> {formState.selectedAssistido.nome}</p>
+                                        <p><strong>CPF:</strong> {formState.selectedAssistido.cpf}</p>
                                     </div>
                                 )}
 
                                 <input
                                     type="text"
                                     placeholder="Nome do processo"
-                                    value={formData.nome}
-                                    onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                                    value={formState.formData.nome}
+                                    onChange={(e) => updateFormState({ formData: { ...formState.formData, nome: e.target.value } })}
                                     required
-                                    disabled={!selectedAssistido}
+                                    disabled={!formState.selectedAssistido}
                                 />
                                 <input
                                     type="text"
                                     placeholder="Número do processo"
-                                    value={formData.numero}
-                                    onChange={(e) => setFormData({...formData, numero: e.target.value})}
+                                    value={formState.formData.numero}
+                                    onChange={(e) => updateFormState({ formData: { ...formState.formData, numero: e.target.value } })}
                                     required
-                                    disabled={!selectedAssistido}
+                                    disabled={!formState.selectedAssistido}
                                 />
                                 <select
-                                    value={formData.status}
-                                    onChange={(e) => setFormData({...formData, status: e.target.value})}
-                                    disabled={!selectedAssistido}
+                                    value={formState.formData.status}
+                                    onChange={(e) => updateFormState({ formData: { ...formState.formData, status: e.target.value } })}
+                                    disabled={!formState.selectedAssistido}
                                 >
                                     <option value="Em andamento">Em andamento</option>
                                     <option value="Concluído">Concluído</option>
                                     <option value="Arquivado">Arquivado</option>
                                 </select>
-                                <button type="submit" disabled={!selectedAssistido}>
+                                <button type="submit" disabled={!formState.selectedAssistido}>
                                     Cadastrar
                                 </button>
                             </form>
@@ -316,15 +440,16 @@ const Processos = () => {
                     </div>
                 )}
 
-                {showEditForm && (
+                {/* Formulário de edição de processo */}
+                {formState.showEditForm && (
                     <div className={styles.formOverlay}>
                         <div className={styles.formContainer}>
                             <div className={styles.editHeader}>
                                 <div className={styles.processInfo}>
                                     <h3>Editar Processo</h3>
-                                    <span>Assistido: {editingProcesso.assistido}</span>
+                                    <span>Assistido: {formState.editingProcesso.assistido}</span>
                                 </div>
-                                <button className={styles.closeButton} onClick={() => setShowEditForm(false)}>
+                                <button className={styles.closeButton} onClick={() => updateFormState({ showEditForm: false })}>
                                     <FaTimes />
                                 </button>
                             </div>
@@ -333,18 +458,22 @@ const Processos = () => {
                                     <input
                                         type="text"
                                         placeholder="Nome do processo"
-                                        value={editingProcesso.nome}
-                                        onChange={(e) => setEditingProcesso({
-                                            ...editingProcesso,
-                                            nome: e.target.value
+                                        value={formState.editingProcesso.nome}
+                                        onChange={(e) => updateFormState({
+                                            editingProcesso: {
+                                                ...formState.editingProcesso,
+                                                nome: e.target.value
+                                            }
                                         })}
                                         required
                                     />
                                     <select
-                                        value={editingProcesso.status}
-                                        onChange={(e) => setEditingProcesso({
-                                            ...editingProcesso,
-                                            status: e.target.value
+                                        value={formState.editingProcesso.status}
+                                        onChange={(e) => updateFormState({
+                                            editingProcesso: {
+                                                ...formState.editingProcesso,
+                                                status: e.target.value
+                                            }
                                         })}
                                     >
                                         <option value="Em andamento">Em andamento</option>
@@ -355,41 +484,68 @@ const Processos = () => {
 
                                 <textarea
                                     placeholder="Descrição detalhada do processo"
-                                    value={editingProcesso.descricao}
-                                    onChange={(e) => setEditingProcesso({
-                                        ...editingProcesso,
-                                        descricao: e.target.value
+                                    value={formState.editingProcesso.descricao}
+                                    onChange={(e) => updateFormState({
+                                        editingProcesso: {
+                                            ...formState.editingProcesso,
+                                            descricao: e.target.value
+                                        }
                                     })}
                                     rows={6}
                                 />
 
                                 <div className={styles.documentSection}>
                                     <h4><FaPaperclip /> Documentos do Processo</h4>
-                                    <div className={styles.fileUpload}>
-                                        <label htmlFor="file-upload">
-                                            <FaPlus /> Arraste arquivos ou clique para anexar
-                                        </label>
-                                        <input
-                                            id="file-upload"
-                                            type="file"
-                                            multiple
-                                            onChange={handleFileUpload}
-                                        />
-                                    </div>
+                                    <form onSubmit={handleAddDocument} className={styles.documentForm}>
+                                        <div className={styles.fileUploadContainer}>
+                                            <input
+                                                type="text"
+                                                name="documentName"
+                                                placeholder="Nome do documento"
+                                                required
+                                            />
+                                            <div className={styles.fileInput}>
+                                                <label htmlFor="documentFile">
+                                                    <FaPaperclip /> Selecionar arquivo
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    name="documentFile"
+                                                    id="documentFile"
+                                                    required
+                                                    accept=".pdf,.doc,.docx,.txt"
+                                                />
+                                            </div>
+                                            <button type="submit">
+                                                <FaPlus /> Anexar Documento
+                                            </button>
+                                        </div>
+                                    </form>
 
-                                    {editingProcesso.documentos?.length > 0 && (
+                                    {formState.editingProcesso.documentos?.length > 0 && (
                                         <div className={styles.documentList}>
-                                            {editingProcesso.documentos.map(doc => (
+                                            {formState.editingProcesso.documentos.map(doc => (
                                                 <div key={doc.id} className={styles.documentItem}>
                                                     <div className={styles.docInfo}>
                                                         <span className={styles.docName}>{doc.name}</span>
-                                                        <span className={styles.docMeta}>
-                                                            {formatTimeAgo(doc.uploadDate)}
-                                                        </span>
+                                                        <span className={styles.docPath}>{doc.localPath}</span>
+                                                        <div className={styles.docActions}>
+                                                            <a 
+                                                                href={doc.filePath} 
+                                                                download={doc.fileName}
+                                                                className={styles.docLink}
+                                                            >
+                                                                <FaDownload /> Baixar
+                                                            </a>
+                                                            <span className={styles.docMeta}>
+                                                                {formatTimeAgo(doc.uploadDate)} • {(doc.size / 1024 / 1024).toFixed(2)}MB
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                     <button 
                                                         type="button"
                                                         onClick={() => handleRemoveDocument(doc.id)}
+                                                        className={styles.removeButton}
                                                     >
                                                         <FaTimes />
                                                     </button>
@@ -405,6 +561,7 @@ const Processos = () => {
                     </div>
                 )}
             </main>
+            {/* Componente de rodapé */}
             <Footer />
         </>
     );

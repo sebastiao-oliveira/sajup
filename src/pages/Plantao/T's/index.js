@@ -34,12 +34,6 @@ const Ts = () => {
         monitores: []
     });
 
-    // Função para buscar os dados completos dos membros
-    const getMemberDetails = (memberId) => {
-        const members = JSON.parse(localStorage.getItem('members')) || [];
-        return members.find(m => m.id === memberId);
-    };
-
     useEffect(() => {
         // Carregar membros e dados do plantão
         const members = JSON.parse(localStorage.getItem('members')) || [];
@@ -47,7 +41,7 @@ const Ts = () => {
             sajuanos: members.filter(m => m.memberType === 'sajuano'),
             monitores: members.filter(m => m.memberType === 'monitor')
         });
-        
+
         const savedPlantoes = JSON.parse(localStorage.getItem('plantoes')) || [];
         const currentPlantao = savedPlantoes.find(p => p.id === infoDuty[0]) || {
             id: infoDuty[0],
@@ -57,13 +51,14 @@ const Ts = () => {
             triunviratos: []
         };
 
-        // Se não encontrar o plantão, criar um novo
+        // Atualizar triunviratos no estado do plantão
+        setPlantao(currentPlantao);
+
+        // Se não encontrar o plantão, criar um novo e salvar no localStorage
         if (!savedPlantoes.find(p => p.id === infoDuty[0])) {
             savedPlantoes.push(currentPlantao);
             localStorage.setItem('plantoes', JSON.stringify(savedPlantoes));
         }
-        
-        setPlantao(currentPlantao);
     }, [infoDuty]);
 
     const handleAddTriunvirato = () => {
@@ -93,23 +88,6 @@ const Ts = () => {
         localStorage.setItem('plantoes', JSON.stringify(updatedPlantoes));
         setPlantao(updatedPlantao);
         setShowAddTriunvirato(false);
-    };
-
-    const handleSaveEdit = (formData) => {
-        const updatedPlantao = {
-            ...plantao,
-            coordenador: formData.get('coordenador'),
-            horario: `${formData.get('horarioEntrada')}-${formData.get('horarioSaida')}`
-        };
-
-        const plantoes = JSON.parse(localStorage.getItem('plantoes')) || [];
-        const updatedPlantoes = plantoes.map(p => 
-            p.id === plantao.id ? updatedPlantao : p
-        );
-        
-        localStorage.setItem('plantoes', JSON.stringify(updatedPlantoes));
-        setPlantao(updatedPlantao);
-        setShowEditDuty(false);
     };
 
     const handleDeleteDuty = () => {
@@ -190,7 +168,7 @@ const Ts = () => {
                 {triunvirato.sajuanos && triunvirato.sajuanos.length > 0 ? (
                     triunvirato.sajuanos.map((sajuanoId, idx) => {
                         const sajuano = availableMembers.sajuanos.find(m => m.id === sajuanoId);
-                        return sajuano ? <p key={idx}>{sajuano.name}</p> : null;
+                        return sajuano ? <p key={idx}>{sajuano.name}</p> : <p key={idx}>Sajuano não encontrado</p>;
                     })
                 ) : (
                     <p>Nenhum sajuano vinculado</p>
@@ -205,7 +183,7 @@ const Ts = () => {
                                 <p>{monitor.name}</p>
                                 <p>OAB: {monitor.oab}</p>
                             </div>
-                        ) : null;
+                        ) : <p key={idx}>Monitor não encontrado</p>;
                     })
                 ) : (
                     <p className={styles.contentMonitor}>Nenhum monitor vinculado</p>
