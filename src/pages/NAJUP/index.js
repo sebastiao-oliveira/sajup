@@ -11,11 +11,18 @@ const NAJUP = () => {
     const renderContent = () => {
         switch (selectedCategory) {
             case 'Processos':
-                return <p>Cadastro e consulta de processos.</p>;
+                // Simulação de uma lista de processos cadastrados
+                return (
+                    <ul>
+                        <li>Processo 1 - Número: 12345</li>
+                        <li>Processo 2 - Número: 67890</li>
+                        <li>Processo 3 - Número: 11223</li>
+                    </ul>
+                );
             case 'Membros':
-                return <p>Cadastro e consulta de membros.</p>;
-            case 'Registros':
-                return <p>Registros de reuniões, atas, editais, modelos e anexos.</p>;
+                return <p>Lista de membros será exibida aqui.</p>;
+            case 'Assistidos':
+                return <p>Lista de assistidos será exibida aqui.</p>;
             default:
                 return <p>Selecione uma categoria.</p>;
         }
@@ -27,11 +34,11 @@ const NAJUP = () => {
             <main className={styles.containerMain}>
                 <aside className={styles.menuLateral}>
                     <ul>
-                        {['Processos', 'Membros', 'Registros'].map((category) => (
+                        {['Processos', 'Membros', 'Assistidos'].map((category) => (
                             <li
                                 key={category}
-                                className={selectedCategory === category ? styles.active : ''}
                                 onClick={() => setSelectedCategory(category)}
+                                className={selectedCategory === category ? styles.active : ''}
                                 role="button"
                                 tabIndex={0}
                                 onKeyPress={(e) => e.key === 'Enter' && setSelectedCategory(category)}
