@@ -13,3 +13,106 @@
     width: calc(100% - 220px);
     float: left;
 }
+
+.searchInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.memberList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.memberItem {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.memberItem:last-child {
+    border-bottom: none;
+}
+
+.memberItem:hover {
+    background-color: #f0f0f0;
+}
+
+.selected {
+    background-color: #d0f0d0;
+}
+
+.readOnlyInput {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.historySection {
+    margin-top: 30px;
+}
+
+.historyTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.historyTable th, .historyTable td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.historyTable th {
+    background-color: #f0f0f0;
+}
+
+.historyTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.historyContainer {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.saveButton {
+    background-color: #800100;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.saveButton:hover {
+    background-color: #660100;
+}
+
+.filterDateContainer {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filterDateInput {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

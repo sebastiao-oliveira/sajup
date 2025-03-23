@@ -61,22 +61,3 @@ Este sistema foi desenvolvido para gerenciar triunviratos e conectar cada um del
 4. Utilize o botão "Editar" para modificar as informações de um triunvirato.
 5. Gerencie processos e assistidos nas respectivas páginas.
 
-## Contribuição
-Contribuições são bem-vindas! Siga os passos abaixo para contribuir:
-1. Faça um fork do repositório.
-2. Crie uma nova branch:
-   ```bash
-   git checkout -b minha-feature
-   ```
-3. Faça as alterações e commit:
-   ```bash
-   git commit -m "Descrição da minha feature"
-   ```
-4. Envie as alterações:
-   ```bash
-   git push origin minha-feature
-   ```
-5. Abra um Pull Request.
-
-## Licença
-Este projeto está licenciado sob a [MIT License](LICENSE).
