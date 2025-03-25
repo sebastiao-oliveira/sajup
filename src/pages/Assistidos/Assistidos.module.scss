@@ -189,6 +189,26 @@
     }
 }
 
+.responsiveForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .formGroup {
+        display: flex;
+        flex: 1 1 calc(50% - 1rem);
+        gap: 1rem;
+
+        input, select {
+            flex: 1;
+        }
+    }
+
+    button {
+        flex: 1 1 100%;
+    }
+}
+
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
@@ -226,6 +246,12 @@
     .actions {
         button {
             padding: 0.5rem;
+        }
+    }
+
+    .responsiveForm {
+        .formGroup {
+            flex: 1 1 100%;
         }
     }
 }

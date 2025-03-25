@@ -17,7 +17,17 @@ const Assistidos = () => {
         cpf: '',
         nomeProcesso: '',
         numeroProcesso: '',
-        status: 'Ativo'
+        status: 'Ativo',
+        rg: '',
+        emissor: '',
+        dataNascimento: '',
+        telefone: '',
+        email: '',
+        cep: '',
+        rua: '',
+        numero: '',
+        bairro: '',
+        complemento: ''
     });
     const [notification, setNotification] = useState('');
 
@@ -64,7 +74,17 @@ const Assistidos = () => {
             cpf: '',
             nomeProcesso: '',
             numeroProcesso: '',
-            status: 'Ativo'
+            status: 'Ativo',
+            rg: '',
+            emissor: '',
+            dataNascimento: '',
+            telefone: '',
+            email: '',
+            cep: '',
+            rua: '',
+            numero: '',
+            bairro: '',
+            complemento: ''
         });
     };
 
@@ -140,41 +160,119 @@ const Assistidos = () => {
                                 <FaTimes />
                             </button>
                             <h3>Cadastrar Novo Assistido</h3>
-                            <form onSubmit={handleSubmit}>
-                                <input
-                                    type="text"
-                                    placeholder="Nome completo"
-                                    value={formData.nome}
-                                    onChange={(e) => setFormData({...formData, nome: e.target.value})}
-                                    required
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="CPF"
-                                    value={formData.cpf}
-                                    onChange={(e) => setFormData({...formData, cpf: e.target.value})}
-                                    required
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Nome do Processo"
-                                    value={formData.nomeProcesso}
-                                    onChange={(e) => setFormData({...formData, nomeProcesso: e.target.value})}
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Número do Processo"
-                                    value={formData.numeroProcesso}
-                                    onChange={(e) => setFormData({...formData, numeroProcesso: e.target.value})}
-                                />
-                                <select
-                                    value={formData.status}
-                                    onChange={(e) => setFormData({...formData, status: e.target.value})}
-                                >
-                                    <option value="Ativo">Ativo</option>
-                                    <option value="Em andamento">Em andamento</option>
-                                    <option value="Concluído">Concluído</option>
-                                </select>
+                            <form onSubmit={handleSubmit} className={styles.responsiveForm}>
+                                <div className={styles.formGroup}>
+                                    <input
+                                        type="text"
+                                        placeholder="Nome completo"
+                                        value={formData.nome}
+                                        onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                                        required
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="CPF"
+                                        value={formData.cpf}
+                                        onChange={(e) => setFormData({...formData, cpf: e.target.value})}
+                                        required
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <input
+                                        type="text"
+                                        placeholder="RG"
+                                        value={formData.rg}
+                                        onChange={(e) => setFormData({...formData, rg: e.target.value})}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Emissor do RG"
+                                        value={formData.emissor}
+                                        onChange={(e) => setFormData({...formData, emissor: e.target.value})}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <input
+                                        type="date"
+                                        placeholder="Data de Nascimento"
+                                        value={formData.dataNascimento}
+                                        onChange={(e) => setFormData({...formData, dataNascimento: e.target.value})}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Telefone"
+                                        value={formData.telefone}
+                                        onChange={(e) => setFormData({...formData, telefone: e.target.value})}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <input
+                                        type="email"
+                                        placeholder="Email"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <input
+                                        type="text"
+                                        placeholder="CEP"
+                                        value={formData.cep}
+                                        onChange={(e) => setFormData({...formData, cep: e.target.value})}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Rua/Avenida"
+                                        value={formData.rua}
+                                        onChange={(e) => setFormData({...formData, rua: e.target.value})}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <input
+                                        type="text"
+                                        placeholder="Número"
+                                        value={formData.numero}
+                                        onChange={(e) => setFormData({...formData, numero: e.target.value})}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Bairro"
+                                        value={formData.bairro}
+                                        onChange={(e) => setFormData({...formData, bairro: e.target.value})}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <input
+                                        type="text"
+                                        placeholder="Complemento"
+                                        value={formData.complemento}
+                                        onChange={(e) => setFormData({...formData, complemento: e.target.value})}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <input
+                                        type="text"
+                                        placeholder="Nome do Processo"
+                                        value={formData.nomeProcesso}
+                                        onChange={(e) => setFormData({...formData, nomeProcesso: e.target.value})}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Número do Processo"
+                                        value={formData.numeroProcesso}
+                                        onChange={(e) => setFormData({...formData, numeroProcesso: e.target.value})}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <select
+                                        value={formData.status}
+                                        onChange={(e) => setFormData({...formData, status: e.target.value})}
+                                    >
+                                        <option value="Ativo">Ativo</option>
+                                        <option value="Em andamento">Em andamento</option>
+                                        <option value="Concluído">Concluído</option>
+                                    </select>
+                                </div>
                                 <button type="submit">Cadastrar</button>
                             </form>
                         </div>
