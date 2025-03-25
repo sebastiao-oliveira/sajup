@@ -33,13 +33,20 @@ const FichaPresenca = () => {
             return;
         }
 
-        const currentDate = new Date().toISOString().split('T')[0]; // Get the current date in YYYY-MM-DD format
+        const formData = new FormData(e.target);
+        const selectedDate = formData.get('date'); // Get the selected date from the form
+
+        if (!selectedDate) {
+            alert('Por favor, selecione uma data.');
+            return;
+        }
 
         const presenceData = {
             memberId: selectedMember.id,
             name: selectedMember.name,
-            entryTime: `${currentDate}T${e.target.entryTime.value}`, // Combine current date with entry time
-            exitTime: `${currentDate}T${e.target.exitTime.value}`, // Combine current date with exit time
+            date: selectedDate, // Store the selected date
+            entryTime: `${selectedDate}T${formData.get('entryTime')}`, // Combine selected date with entry time
+            exitTime: `${selectedDate}T${formData.get('exitTime')}`, // Combine selected date with exit time
         };
 
         const storedPresence = [...presenceHistory, presenceData];
@@ -61,13 +68,7 @@ const FichaPresenca = () => {
 
     const filteredPresenceHistory = presenceHistory.filter((presence) => {
         if (!filterDate) return true;
-        try {
-            const presenceDate = new Date(`1970-01-01T${presence.entryTime}`).toISOString().split('T')[0];
-            return presenceDate === filterDate;
-        } catch (error) {
-            console.error('Invalid time value in presence history:', presence.entryTime);
-            return false;
-        }
+        return presence.date === filterDate; // Compare the stored date with the filter date
     });
 
     return (
@@ -108,6 +109,10 @@ const FichaPresenca = () => {
                         />
                     </label>
                     <label>
+                        Data:
+                        <input type="date" name="date" required />
+                    </label>
+                    <label>
                         Horário de Entrada:
                         <input type="time" name="entryTime" required />
                     </label>
@@ -134,6 +139,7 @@ const FichaPresenca = () => {
                             <thead>
                                 <tr>
                                     <th>Nome</th>
+                                    <th>Data</th>
                                     <th>Horário de Entrada</th>
                                     <th>Horário de Saída</th>
                                 </tr>
@@ -142,8 +148,9 @@ const FichaPresenca = () => {
                                 {filteredPresenceHistory.map((presence, index) => (
                                     <tr key={index}>
                                         <td>{presence.name}</td>
-                                        <td>{presence.entryTime}</td>
-                                        <td>{presence.exitTime}</td>
+                                        <td>{presence.date}</td>
+                                        <td>{presence.entryTime.split('T')[1]}</td>
+                                        <td>{presence.exitTime.split('T')[1]}</td>
                                     </tr>
                                 ))}
                             </tbody>

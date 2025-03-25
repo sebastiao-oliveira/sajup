@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react";
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
 import styles from './Home.module.scss'
@@ -6,12 +6,13 @@ import {FaUser} from 'react-icons/fa'
 import {PiFileTextFill} from 'react-icons/pi'
 import {AiFillSchedule} from 'react-icons/ai'
 import {  useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
 
 const Home = () => {
-    const [date, setDate] = useState()
-    const [assistidos, setAssistidos] = useState([])
-    const [processos, setProcessos] = useState([])
+    const [date, setDate] = useState();
+    const [assistidos, setAssistidos] = useState([]);
+    const [processos, setProcessos] = useState([]);
+    const [entryTime, setEntryTime] = useState('');
+    const [exitTime, setExitTime] = useState('');
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -72,6 +73,29 @@ const Home = () => {
         navigate('/processos');
     };
 
+    const handleSavePresence = () => {
+        if (!entryTime || !exitTime) {
+            alert('Por favor, preencha os horários de entrada e saída.');
+            return;
+        }
+
+        const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+        const presenceData = {
+            name: 'Usuário', // Replace with the logged-in user's name if available
+            date: currentDate,
+            entryTime: `${currentDate}T${entryTime}`,
+            exitTime: `${currentDate}T${exitTime}`,
+        };
+
+        const storedPresence = JSON.parse(localStorage.getItem('presence')) || [];
+        storedPresence.push(presenceData);
+        localStorage.setItem('presence', JSON.stringify(storedPresence));
+
+        alert('Presença registrada com sucesso!');
+        setEntryTime('');
+        setExitTime('');
+    };
+
     return(
     <>
         <Header/>
@@ -120,12 +144,22 @@ const Home = () => {
                     <AiFillSchedule/>
                     <span>{date}</span>
                     <div className={styles.inputs}>
-                        <input type="text" placeholder="Horário de entrada"/>
-                        <input type="text" placeholder="Horário de saída"/>
+                        <input
+                            type="time"
+                            placeholder="Horário de entrada"
+                            value={entryTime}
+                            onChange={(e) => setEntryTime(e.target.value)}
+                        />
+                        <input
+                            type="time"
+                            placeholder="Horário de saída"
+                            value={exitTime}
+                            onChange={(e) => setExitTime(e.target.value)}
+                        />
                     </div>
                     <div className={styles.buttons}>
-                        <button>Salvar</button>
-                        <button>Ver horários</button>
+                        <button onClick={handleSavePresence}>Salvar</button>
+                        <button onClick={() => navigate('/ficha-presenca')}>Ver horários</button>
                     </div>
                 </section>
                 </article>
