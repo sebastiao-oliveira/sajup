@@ -8,6 +8,7 @@ import styles from './Plantao.module.scss'
 const Plantao = () => {
     const [paramsLink, setParamsLink] = useState([])
     const [addDuty, setAddDuty] = useState(false)
+    const [plantoes, setPlantoes] = useState([]); // State to store all plantoes
     const navigate = useNavigate()
 
     const handleClick = (e) => {
@@ -24,6 +25,28 @@ const Plantao = () => {
         setParamsLink(paramsToPass)
     }
 
+    const handleAddDuty = (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const newDuty = {
+            id: form.elements['identificador'].value,
+            diaSemana: form.elements['diaSemana'].value,
+            horario: `${form.elements['entrada'].value}-${form.elements['saida'].value}`,
+            coordenador: form.elements['coordenador'].value,
+            triunviratos: []
+        };
+
+        const updatedPlantoes = [...plantoes, newDuty];
+        localStorage.setItem('plantoes', JSON.stringify(updatedPlantoes));
+        setPlantoes(updatedPlantoes); // Update state to re-render the list
+        setAddDuty(false);
+    };
+
+    useEffect(() => {
+        const savedPlantoes = JSON.parse(localStorage.getItem('plantoes')) || [];
+        setPlantoes(savedPlantoes);
+    }, []);
+
     useEffect(()=> {
         if(paramsLink) navigate(`/plantao/${paramsLink}`)
     },[paramsLink, navigate])
@@ -39,76 +62,34 @@ const Plantao = () => {
                     {addDuty && (
                         <article className={styles.addDuty}>
                             <h4>Dados do Plantão</h4>
-                            <section className={styles.areaForm}>
-                                <input type="text" placeholder="Identificador"/>
-                                <input type="text" placeholder="Dia da semana"/>
-                                <InputMask mask="99:99" placeholder="Horário de entrada"/>
-                                <InputMask mask="99:99" placeholder="Horário de saída"/>
-                                <input type="text" placeholder="Coordenador" className={styles.coordinator}/>
-                            </section>
-                            <section className={styles.areaBtn}>
-                                <button onClick={() => setAddDuty(!addDuty)}>Confirmar</button>
-                                <button onClick={() => setAddDuty(!addDuty)}>Cancelar</button>
-                            </section>
+                            <form className={styles.areaForm} onSubmit={handleAddDuty}>
+                                <input type="text" name="identificador" placeholder="Identificador" required />
+                                <input type="text" name="diaSemana" placeholder="Dia da semana" required />
+                                <InputMask mask="99:99" name="entrada" placeholder="Horário de entrada" required />
+                                <InputMask mask="99:99" name="saida" placeholder="Horário de saída" required />
+                                <input type="text" name="coordenador" placeholder="Coordenador" className={styles.coordinator} required />
+                                <section className={styles.areaBtn}>
+                                    <button type="submit">Confirmar</button>
+                                    <button type="button" onClick={() => setAddDuty(false)}>Cancelar</button>
+                                </section>
+                            </form>
                         </article>
                     )}
                     <article className={styles.containerCards}>
-                        <section className={styles.containerCard} onClick={(e) => handleClick(e)}>
-                            <h4 className={styles.day}>Segunda-feira</h4>
-                            <div className={styles.card}>
-                                <h4>TA</h4>
-                                <a>Ver mais detalhes</a>
-                                <p>14:00-17:00</p>
-                            </div>
-                        </section>
-                        <section className={styles.containerCard} onClick={(e) => handleClick(e)}>
-                            <h4 className={styles.day}>Terça-feira</h4>
-                            <div className={styles.card}>
-                                <h4>TB</h4>
-                                <a>Ver mais detalhes</a>
-                                <p>14:00-17:00</p>
-                            </div>
-                        </section>
-                        <section className={styles.containerCard} onClick={(e) => handleClick(e)}>
-                            <h4 className={styles.day}>Terça-feira</h4>
-                            <div className={styles.card}>
-                                <h4>TC</h4>
-                                <a>Ver mais detalhes</a>
-                                <p>18:30-20:30</p>
-                            </div>
-                        </section>
-                        <section className={styles.containerCard} onClick={(e) => handleClick(e)}>
-                            <h4 className={styles.day}>Quarta-feira</h4>
-                            <div className={styles.card}>
-                                <h4>TD</h4>
-                                <a>Ver mais detalhes</a>
-                                <p>14:00-17:00</p>
-                            </div>
-                        </section>
-                        <section className={styles.containerCard} onClick={(e) => handleClick(e)}>
-                            <h4 className={styles.day}>Quarta-feira</h4>
-                            <div className={styles.card}>
-                                <h4>TE</h4>
-                                <a>Ver mais detalhes</a>
-                                <p>18:30-20:30</p>
-                            </div>
-                        </section>
-                        <section className={styles.containerCard} onClick={(e) => handleClick(e)}>
-                            <h4 className={styles.day}>Quinta-feira</h4>
-                            <div className={styles.card}>
-                                <h4>TF</h4>
-                                <a>Ver mais detalhes</a>
-                                <p>18:30-20:30</p>
-                            </div>
-                        </section>
-                        <section className={styles.containerCard} onClick={(e) => handleClick(e)}>
-                            <h4 className={styles.day}>Sexta-feira</h4>
-                            <div className={styles.card}>
-                                <h4>TG</h4>
-                                <a>Ver mais detalhes</a>
-                                <p>14:00-17:00</p>
-                            </div>
-                        </section>
+                        {plantoes.map((plantao, index) => (
+                            <section 
+                                key={index} 
+                                className={styles.containerCard} 
+                                onClick={(e) => handleClick(e)}
+                            >
+                                <h4 className={styles.day}>{plantao.diaSemana}</h4>
+                                <div className={styles.card}>
+                                    <h4>{plantao.id}</h4>
+                                    <a>Ver mais detalhes</a>
+                                    <p>{plantao.horario}</p>
+                                </div>
+                            </section>
+                        ))}
                     </article>
                 </main>
             <Footer/>

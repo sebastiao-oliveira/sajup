@@ -15,13 +15,13 @@ import styles from './Ts.module.scss'
 
 const Ts = () => {
     const navigate = useNavigate();
-    const {params} = useParams();
+    const { params } = useParams();
     const infoDuty = params.split(',');
     const [plantao, setPlantao] = useState({
         id: infoDuty[0],
         diaSemana: infoDuty[1],
         horario: infoDuty[2],
-        coordenador: "João Carlos Mercês Almeida dos Santos",
+        coordenador: '', // Initialize as empty
         triunviratos: []
     });
     const [showAssistidos, setShowAssistidos] = useState(false);
@@ -33,6 +33,7 @@ const Ts = () => {
         sajuanos: [],
         monitores: []
     });
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); // State for delete confirmation modal
 
     useEffect(() => {
         // Carregar membros e dados do plantão
@@ -47,7 +48,7 @@ const Ts = () => {
             id: infoDuty[0],
             diaSemana: infoDuty[1],
             horario: infoDuty[2],
-            coordenador: "João Carlos Mercês Almeida dos Santos",
+            coordenador: members.find(m => m.memberType === 'coordenador')?.name || "Coordenador não encontrado",
             triunviratos: []
         };
 
@@ -91,12 +92,10 @@ const Ts = () => {
     };
 
     const handleDeleteDuty = () => {
-        if (window.confirm('Tem certeza que deseja excluir este plantão?')) {
-            const plantoes = JSON.parse(localStorage.getItem('plantoes')) || [];
-            const updatedPlantoes = plantoes.filter(p => p.id !== plantao.id);
-            localStorage.setItem('plantoes', JSON.stringify(updatedPlantoes));
-            navigate('/plantao');
-        }
+        const plantoes = JSON.parse(localStorage.getItem('plantoes')) || [];
+        const updatedPlantoes = plantoes.filter(p => p.id !== plantao.id);
+        localStorage.setItem('plantoes', JSON.stringify(updatedPlantoes));
+        navigate('/plantao'); // Redirect to the main page
     };
 
     const handleEditTriunvirato = (triunvirato) => {
@@ -159,6 +158,27 @@ const Ts = () => {
             setPlantao(updatedPlantao);
             setShowEditTriunvirato(false);
         }
+    };
+
+    const handleEditDuty = (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const updatedPlantao = {
+            ...plantao,
+            id: form.elements['identificador'].value,
+            diaSemana: form.elements['diaSemana'].value,
+            horario: `${form.elements['entrada'].value}-${form.elements['saida'].value}`,
+            coordenador: form.elements['coordenador'].value
+        };
+
+        const plantoes = JSON.parse(localStorage.getItem('plantoes')) || [];
+        const updatedPlantoes = plantoes.map(p => 
+            p.id === plantao.id ? updatedPlantao : p
+        );
+
+        localStorage.setItem('plantoes', JSON.stringify(updatedPlantoes));
+        setPlantao(updatedPlantao);
+        setShowEditDuty(false);
     };
 
     const renderTriunvirato = (triunvirato) => {
@@ -242,29 +262,39 @@ const Ts = () => {
                 </article>
                 {showEditDuty && (
                     <article className={styles.containerEditDuty}>
-                        <h4>Dados do Plantão</h4>
-                        <section className={styles.containerInputs}>
-                            <label className={styles.labelInput}>
-                                <span>Identificador</span>
-                                <input type="text" placeholder="TA"/>
-                            </label>
-                            <label className={styles.labelInput}>
-                                <span>Dia da semana</span>
-                                <input type="text" placeholder="Segunda-feira"/>
-                            </label>
-                            <label className={styles.labelInput}>
-                                <span>Horário de entrada</span>
-                                <InputMask type placeholder="14:00" mask="99:99"/>
-                            </label>
-                            <label className={styles.labelInput}>
-                                <span>Horário de saída</span>
-                                <InputMask type="text" placeholder="17:00" mask="99:99"/>
-                            </label>
-                            <label className={styles.labelInput}>
-                                <span>Coordenador</span>
-                                <input type="text" placeholder="João Carlos Mercês Almeida dos Santos" className={styles.inputCoordinator}/>
-                            </label>
-                        </section>
+                        <h4>Editar Plantão</h4>
+                        <form onSubmit={handleEditDuty}>
+                            <section className={styles.containerInputs}>
+                                <label className={styles.labelInput}>
+                                    <span>Identificador</span>
+                                    <input type="text" name="identificador" defaultValue={plantao.id} required />
+                                </label>
+                                <label className={styles.labelInput}>
+                                    <span>Dia da semana</span>
+                                    <input type="text" name="diaSemana" defaultValue={plantao.diaSemana} required />
+                                </label>
+                                <label className={styles.labelInput}>
+                                    <span>Horário de entrada</span>
+                                    <InputMask mask="99:99" name="entrada" defaultValue={plantao.horario.split('-')[0]} required />
+                                </label>
+                                <label className={styles.labelInput}>
+                                    <span>Horário de saída</span>
+                                    <InputMask mask="99:99" name="saida" defaultValue={plantao.horario.split('-')[1]} required />
+                                </label>
+                                <label className={styles.labelInput}>
+                                    <span>Coordenador</span>
+                                    <input type="text" name="coordenador" defaultValue={plantao.coordenador} className={styles.inputCoordinator} required />
+                                </label>
+                            </section>
+                            <section className={styles.containerButtons}>
+                                <button type="submit" className={styles.saveDuty}>
+                                    Salvar
+                                </button>
+                                <button type="button" onClick={() => setShowEditDuty(false)}>
+                                    Cancelar
+                                </button>
+                            </section>
+                        </form>
                     </article>
                 )}
                 <article className={styles.containerButtons}>
@@ -284,10 +314,28 @@ const Ts = () => {
                             <> <MdModeEditOutline/> Editar </>
                         )} 
                     </button>
-                    <button onClick={handleDeleteDuty}>
+                    <button onClick={() => setShowDeleteConfirm(true)}>
                         <IoMdTrash/>Excluir
                     </button>
                 </article>
+
+                {/* Delete Confirmation Modal */}
+                {showDeleteConfirm && (
+                    <div className={styles.modalDeleteConfirm}>
+                        <div className={styles.modalContent}>
+                            <h4>Confirmação</h4>
+                            <p>Tem certeza que deseja excluir este plantão?</p>
+                            <div className={styles.modalActions}>
+                                <button onClick={handleDeleteDuty} className={styles.confirmBtn}>
+                                    Confirmar
+                                </button>
+                                <button onClick={() => setShowDeleteConfirm(false)} className={styles.cancelBtn}>
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {showAddTriunvirato && (
                     <div className={styles.modalAddTriunvirato}>

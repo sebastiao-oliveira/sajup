@@ -148,4 +148,31 @@ button{
     input.coordinator{
         width: 400px;
     }
+
+    .areaBtn {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+
+        button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+
+            &:first-of-type {
+                background-color: $primary-color;
+                color: $light-color;
+                border: none;
+            }
+
+            &:last-of-type {
+                background-color: #ccc;
+                color: #333;
+                border: none;
+            }
+        }
+    }
 }
