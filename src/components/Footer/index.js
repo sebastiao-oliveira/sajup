@@ -22,12 +22,10 @@ const Footer = () => {
                         <FaPhone/> 
                         <span>(71) 3283-9050 </span>
                     </div>
-
                     <div>
                         <MdEmail/> 
                         <span>sajubahia@gmail.com</span>
                     </div>
-
                     <div id={styles.divLocation}>
                         <RiMapPin2Fill/> 
                         <span>R. da Paz, s/n, Térreo da Faculdade de Direito da UFBA, Graça Salvador, Bahia, Brasil. </span>
@@ -37,4 +35,4 @@ const Footer = () => {
         </footer>
     )
 }
-export default Footer
+export default Footer;

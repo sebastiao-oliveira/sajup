@@ -68,3 +68,20 @@
     
     @include responsive-tablet-mobile-containerContent;
 }
+
+@media (max-width: 480px) {
+    .containerContent {
+        width: 90%;
+        height: auto;
+        padding: 1rem;
+
+        h4 {
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            font-size: 0.9rem;
+        }
+    }
+}

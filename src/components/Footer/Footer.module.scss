@@ -67,7 +67,9 @@
     align-items: center;
     justify-content: center;
     height: 200px;
-    background-color: $primary-color-dark;
+    background-color: #800100;
+    color: white;
+    padding: 20px 10px;
     font-family: 'Roboto';
 
     @include responsive-tablet-mobile-containerFooter;
@@ -75,14 +77,18 @@
 
 .contentFooter{
     width: 1300px;
-    justify-content: center;
+    justify-content: space-between;
     display: flex;
+    align-items: center;
+    flex-wrap: wrap;
     flex-direction: column;
 
     svg{
         color: $light-color;
         width: 30px;
         height: 30px;
+        font-size: 24px;
+        cursor: pointer;
     }
 
     @include responsive-tablet-mobile-contentFooter;
@@ -94,6 +100,9 @@
     width: 600px;
     height: 60px;
     align-items: center;
+    flex: 1;
+    text-align: center;
+    margin-bottom: 10px;
 
     p, span{
         color: $light-color;
@@ -106,6 +115,8 @@
     img{
         width: 90px;
         height: 60px;
+        max-width: 100px;
+        margin-bottom: 10px;
     }
 
     @include responsive-tablet-mobile-copy;
@@ -116,9 +127,12 @@
     display: flex;
     flex-direction: column;
     align-self: flex-end;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 15px;
     height: 128px;
     position: absolute;
+    flex: 1;
+    margin-bottom: 10px;
 
     @include responsive-tablet-mobile-socials;
 }
@@ -128,17 +142,64 @@
     width: 1200px;
     gap: 60px;
     margin-top: 57px;
+    flex: 2;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 
     span{
         margin-left: 10px;
         color: $light-color;
+        font-size: 14px;
     }
     
     div{
         display: flex;
         align-items: center;
+        margin-bottom: 10px;
+        gap: 5px;
     }
 
     @include responsive-tablet-mobile-contacts;
     @include responsivel-mobile-icon-location;
+}
+
+@media (max-width: 768px) {
+    .footerContainer {
+        height: auto;
+        padding: 1rem;
+    }
+
+    .contentFooter {
+        flex-direction: column;
+        align-items: center;
+
+        .contacts {
+            align-items: flex-start;
+        }
+    }
+
+    .copy {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .contacts {
+        flex-direction: column;
+        gap: 1rem;
+
+        div {
+            justify-content: center;
+        }
+    }
+
+    .socials {
+        flex-direction: row;
+        gap: 1rem;
+    }
 }

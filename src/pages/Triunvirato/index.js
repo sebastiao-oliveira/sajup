@@ -38,7 +38,7 @@ const Triunvirato = () => {
                     placeholder="Pesquisar Triunvirato"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={styles.searchInput} // Add a class for styling
+                    className={styles.searchInput}
                 />
                 <section className={styles.triunviratosList}>
                     {filteredTriunviratos.map((triunvirato, index) => (

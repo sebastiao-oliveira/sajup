@@ -120,3 +120,25 @@
         }
     }
 }
+
+@media (max-width: 480px) {
+    .containerInside {
+        padding: 1rem;
+        max-width: 90%;
+
+        .content {
+            h3 {
+                font-size: 1rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            .buttonContainer button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    }
+}

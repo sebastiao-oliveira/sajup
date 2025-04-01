@@ -8,9 +8,11 @@ const ModalRecover = () => {
             <section className={styles.containerContent}>
                 <img src={logo} alt='logo-red'/>
                 <h4>Você receberá um e-mail com sua senha de acesso.</h4>
-                <button> <Link to="/"> Tentar fazer login novamente </Link> </button>
+                <button> 
+                    <Link to="/">Tentar fazer login novamente</Link> 
+                </button>
             </section>
         </main>
     )
 }
-export default ModalRecover
+export default ModalRecover;

@@ -18,4 +18,4 @@ const ModalDelete = ({ close, confirm, memberName }) => {
         </main>
     )
 }
-export default ModalDelete
+export default ModalDelete;

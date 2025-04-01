@@ -11,7 +11,7 @@ const Header = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        AuthService.logout(); // Agora usa o AuthService
+        AuthService.logout();
         navigate('/');
     };
   
